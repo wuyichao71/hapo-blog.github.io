@@ -7,7 +7,7 @@ title: Hapo's blog
 subtitle: ''
 description: ''
 keywords:
-author: Yichao Wu
+author: hapo
 language: cn
 timezone: ''
 
@@ -97,7 +97,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
@@ -105,3 +105,10 @@ deploy:
   type: git
   # repo: git@github.com:wuyichao71/hapo.github.io.git
   # branch: master
+  
+# Search Config
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 100
