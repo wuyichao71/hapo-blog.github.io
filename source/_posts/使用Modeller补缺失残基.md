@@ -87,4 +87,61 @@ a.loop.md_level       = refine.fast
 
 a.make()
 ```
-使用该代码会生成一个使用model生成的结构(`a.starting_model = 1`和`a.ending_model = 1`)和两个使用loopmodel生成的结构(`a.loop.starting_model = 1`和`a.loop.ending_model = 2`)。如果我们要生成更多的结构，那么我们可以把`a.ending_model`和`a.loop.ending_model`设定为更大的值。
+使用该代码会生成一个使用model生成的结构(`a.starting_model = 1`和`a.ending_model = 1`)和两个使用loopmodel生成的结构(`a.loop.starting_model = 1`和`a.loop.ending_model = 2`)。如果我们要生成更多的结构，那么我们可以把`a.ending_model`和`a.loop.ending_model`设定为更大的值。  
+
+如果你不需要对loop进行优化，那么你可以选择`AutoModel`代替`LoopModel`，同时移除与loop相关的三个参数。  
+
+使用`LoopModel`和`AutoModel`补残基时，默认所有的原子都可以移动，如果你想让不缺失的残基不被移动的话，你可以设置`select_atoms`方法。在Modeller中，残基序号是从1开始并且按顺序加一的，因此在写`residue_range`有可能需要重新编号。同时`residue_range`是包括最后一个列出的残基的。
+
+
+```python
+from modeller import *
+from modeller.automodel import *    # Load the AutoModel class
+
+log.verbose()
+env = Environ()
+
+# directories for input atom files
+env.io.atom_files_directory = ['.', '../atom_files']
+
+class MyModel(AutoModel):
+    def select_atoms(self):
+        return Selection(self.residue_range('86:A', '89:A'),
+                         self.residue_range('180:B', '187:B'),
+                         self.residue_range('493:C', '501:C'))
+
+a = MyModel(env, alnfile = 'alignment.ali',
+            knowns = '4gnx_half', sequence = '4gnx_half_fill')
+a.starting_model= 1
+a.ending_model  = 1
+
+a.make()
+```
+如果使用的是`LoopModel`，那么在使用以上的方式进行约束时，两个边界上的残基还是会被移动，因此还需要添加``select_loop_atoms`进行限制。  
+```python
+from modeller import *
+from modeller.automodel import *    # Load the AutoModel class
+
+log.verbose()
+env = Environ()
+
+# directories for input atom files
+env.io.atom_files_directory = ['.', '../atom_files']
+
+class MyModel(LoopModel):
+    def select_atoms(self):
+        return Selection(self.residue_range('86:A', '89:A'),
+                         self.residue_range('180:B', '187:B'),
+                         self.residue_range('493:C', '501:C'))
+    def select_loop_atoms(self):
+        return Selection(self.residue_range('86:A', '89:A'),
+                         self.residue_range('180:B', '187:B'),
+                         self.residue_range('493:C', '501:C'))
+
+a = MyModel(env, alnfile = 'alignment.ali',
+            knowns = '4gnx_half', sequence = '4gnx_half_fill')
+a.starting_model= 1
+a.ending_model  = 1
+
+a.make()
+```
