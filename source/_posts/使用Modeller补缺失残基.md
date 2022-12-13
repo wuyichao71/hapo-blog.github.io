@@ -22,6 +22,7 @@ aln = Alignment(e)
 aln.append_model(m, align_codes=code)
 aln.write(file=code+'.seq')
 ```
+<!--more-->
 用以上代码生成的序列文件`4gnx_half.seq`如下：
 ```
 
