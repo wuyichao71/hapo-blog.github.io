@@ -97,13 +97,13 @@ creative_commons:
 # ---------------------------------------------------------------
 
 # Schemes
-# scheme: Muse
-scheme: Mist
+scheme: Muse
+# scheme: Mist
 #scheme: Pisces
 # scheme: Gemini
 
 # Dark Mode
-darkmode: true
+darkmode: false
 
 
 # ---------------------------------------------------------------
@@ -122,7 +122,7 @@ menu:
   类别: /categories/ || fa fa-th
   归档: /archives/ || fa fa-archive
   相册: /gallery/ || fa fa-image
-  # 计划: /schedule/ || fa fa-calendar
+  日程表: /schedule/ || fa fa-calendar
   #sitemap: /sitemap.xml || fa fa-sitemap
   #commonweal: /404/ || fa fa-heartbeat
 
@@ -322,7 +322,7 @@ tagcloud:
 # Google Calendar
 # Share your recent schedule to others via calendar page.
 calendar:
-  calendar_id: <required> # Your Google account E-Mail
+  calendar_id: wuyichao86@gmail.com # Your Google account E-Mail
   api_key: <required>
   orderBy: startTime
   offsetMax: 24 # Time Range
