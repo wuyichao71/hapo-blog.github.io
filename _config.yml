@@ -113,6 +113,3 @@ search:
   format: html
   limit: 100
 
-auto_excerpt:
-enable: true
-length: 15
