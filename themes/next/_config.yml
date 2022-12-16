@@ -998,9 +998,5 @@ js: js
 images: images
 
 # mathjax
-mathjax:
-  enable: true
-  per_page: true
-  mhchem: true
-  cdn: //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+# mathjax: true
 
