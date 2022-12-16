@@ -997,4 +997,8 @@ css: css
 js: js
 images: images
 
+# mathjax
+enable: true
+mhchem: true
+
 
