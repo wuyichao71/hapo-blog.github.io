@@ -13,3 +13,4 @@ mathjax: true
 数学分析已经学到了函数极限部分，从$\epsilon-N$语言到了$\epsilon-\delta$语言。
 
 SICP则学完了高阶函数(higher-order function)部分，完成了第一个project，受益良多，再继续看吧。
+<!--more-->
