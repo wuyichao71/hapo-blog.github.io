@@ -13,9 +13,9 @@ tags:
 ```latex
 \newcommand{\<cmdname>}[<n>]{<command>}
 ```
-+ `<cmdname>`为新定义的命令名字。  
-+ `<n>`为参数个数，各个参数可以在命令体中用`#1`、`#2`表示  
-+ `<command>`为命令体。  
+  1. `<cmdname>`为新定义的命令名字。  
+  2. `<n>`为参数个数，各个参数可以在命令体中用`#1`、`#2`表示  
+  3. `<command>`为命令体。  
 例如，可以用`newcommand`定义平均值的表示:
 ```latex
 \newcommand{\mean}[2]{\frac{#1_1 + #1_2 + \cdots + #1_#2}{#2}}
