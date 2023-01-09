@@ -13,9 +13,9 @@ tags:
 ```latex
 \newcommand{\<cmdname>}[<n>]{<command>}
 ```
-* `<cmdname>`为新定义的命令名字。  
-* `<n>`为参数个数，各个参数可以在命令体中用`#1`、`#2`表示  
-* `<command>`为命令体。  
++ `<cmdname>`为新定义的命令名字。  
++ `<n>`为参数个数，各个参数可以在命令体中用`#1`、`#2`表示  
++ `<command>`为命令体。  
 例如，可以用`newcommand`定义平均值的表示:
 ```latex
 \newcommand{\mean}[2]{\frac{#1_1 + #1_2 + \cdots + #1_#2}{#2}}
@@ -32,7 +32,7 @@ tags:
 $$ \frac{a_1+a_2+\cdots+a_n}{n} $$
 有时候我们需要重新定义一个已经定义的命令，此时，我们可以用`renewcommand`，`renewcommand`的使用和`newcomand`相同，但是它必须以及存在原命令，否则会报错。
 这些命令的定义会受到局部环境的影响，即在环境内部定义的命令在外部无法使用。
-
+<!--more-->
 # 使用局部命令
 为了让书写简单美观，我们常常希望命令能够像编程语言的变量一样，即可以重新定义后对之后的代码都生效。使用`newcommand`和`renewcommand`我们可以如下操作:
 ```latex
