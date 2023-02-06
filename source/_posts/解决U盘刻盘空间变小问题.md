@@ -14,4 +14,4 @@ resizepart 2 -1 # 将第二个分区充满剩下的空间
 quit # 退出
 sudo resize2fs /dev/sdc2 # 使用resize2fs来调整sdc2分区大小
 ```
-亲测在树莓派的SD卡以及U盘上都可用。
+亲测在树莓派的SD卡以及U盘上都可用。但是对于U盘也只是lsblk可以识别出大小而已，df命令依旧识别ISO的大小，不知道怎么修正，猜测是最后一步出错了。
