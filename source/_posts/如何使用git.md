@@ -15,3 +15,4 @@ git config --global user.email "hapo@mail.com"
 git config --global core.editor vim
 git config --global color.ui true
 ```
+这些配置会储存在家目录下的`.gitconfig`中，经过了配置之后，我们就可以开始使用git了
