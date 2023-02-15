@@ -23,6 +23,7 @@ git config --global color.ui true
 ```bash
 git init
 ```
+
 ### 查看存档信息
 使用
 ```bash
