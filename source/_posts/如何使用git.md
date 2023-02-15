@@ -76,3 +76,4 @@ git checkout 8e4f
 而不是`git reset`。这时你将处于一个虚拟的分支中，你可以
 
 
+
