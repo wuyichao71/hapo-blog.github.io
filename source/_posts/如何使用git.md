@@ -57,7 +57,7 @@ git commit
 ### 读档
 我们可以使用`git log`来查看已有的存档，并决定需要回到哪个过去，每一份存档都有一个hash code，例如`8e4fac44d3b567591bc3768fc94d53575726b866`，我们需要通过hash code来告诉`git`我们希望读取哪一个档。使用一下命令进行独档:
 ```bash
-git reset --head 8e4f
+git reset --hard 8e4f
 ```
 
 其中`8e4f`是上文hash code的前缀，我们不需要输入整个hash code。这时候我们的代码已经回到过去了。  
