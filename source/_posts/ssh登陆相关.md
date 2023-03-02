@@ -38,6 +38,8 @@ Host hapo
     Port 22
     User hapo
     IdentityFile ~/.ssh/id_rsa
+    ServerAliveInterval 60 # 每60秒发送一次空请求
+    ServerAliveCountMax 10 # 断开时重新连接的次数
 ```
 
 # 使用`ssh-agent`和`ssh-add`
