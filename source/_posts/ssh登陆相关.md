@@ -74,6 +74,16 @@ oathtool -b --totp <identity>
 `<identity>`为用于生成二次验证的身份码。
 
 # `sshpass`
-
+`sshpass`可以用于在命令行输入密码, 命令行如下:
+```bash
+sshpass -p <password> <user>@<hostname>
+```
+通过结合`oathtool`, 可以实现免二次验证:
+```bash
+#！/bin/bash
+totp=`oathtool -b --totp <identity>`
+sshpass -p "<password> $totp" <user>@<hostname>
+```
 
 # `expect`
+`expect`命令可以用于与终端进行交互, `expect`使用的是tcl语言, 这里不准备说明语法，只说明对应的一些用法
