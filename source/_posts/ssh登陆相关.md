@@ -30,6 +30,7 @@ ssh -i ~/.ssh/filename hapo@websever1
 ssh-keygen -l -f ~/.ssh/filename
 ssh-keygen -l -f ~/.ssh/filename.pub
 ```
+<!--more-->
 # ssh配置文件
 可以在`~/.ssh/config`中写如下命令简化`ssh`登陆时所需参数:
 ```bash
