@@ -27,7 +27,8 @@ source /path/to/amber/amber.sh
 
 amber22的一些程序需要python环境, 有很多方法可以python环境.
 
-### 1.
+### 1
+
 amber22默认会下载miniconda, 这样可以搭建出amber22适配的环境. 安装完成后会生成一个`amber.python`软连接, 这样可以和系统默认的python区分开. 但是在hpcc集群上没有办法连接外网, 此时可以如下操作: (1) 在`amber22_src/build`下新建文件夹`CMakeFiles/miniconda/download/`, 下载好`Miniconda3-latest-Linux-x86_64.sh`放入该文件夹中, 之后cmake会认为该文件已下载好, 从而跳过下载过程. (2) 修改`amber22_src/cmake`文件夹下的`UseMiniconda.cmake`文件, 修改91行
 
 ```cmake
@@ -73,6 +74,23 @@ index-url = https://mirror.nju.edu.cn/pypi/web/simple/
 
 ```
 
-这样后使用miniconda的python环境就可以顺利安装了. 
+这样后使用miniconda的python环境就可以顺利安装了.
 
-### 2.
+### 2
+
+如果已经在本地装过anaconda, 那么我们就可以用anaconda生成一个安装amber22的本地环境
+
+```bash
+conda create -n amber python=3.10
+conda activate amber
+```
+
+amber22的安装需要一些python库
+
+```conda
+conda install numpy
+conda install scipy
+conda install matplotlib
+conda install setuptools
+conda install thinker
+```
