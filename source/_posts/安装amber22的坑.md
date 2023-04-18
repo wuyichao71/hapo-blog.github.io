@@ -78,7 +78,7 @@ index-url = https://mirror.nju.edu.cn/pypi/web/simple/
 
 ### 2
 
-如果已经在本地装过anaconda, 那么我们就可以用anaconda生成一个安装amber22的本地环境
+如果已经在本地装过anaconda, 那么我们就可以用anaconda生成一个安装amber22的本地环境, 这样可以和已经安装过的python库同时在一个环境下使用. 使用本地python环境需要设置如下的选项`-DDOWNLOAD_MINICONDA=FALSE`(不下载miniconda)和`-DUSE_CONDA_LIBS=TRUE`(使用conda的python库). 可以用以下命令生成一个新的环境.
 
 ```bash
 conda create -n amber python=3.10
