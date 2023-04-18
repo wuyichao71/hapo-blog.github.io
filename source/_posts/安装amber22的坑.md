@@ -94,3 +94,5 @@ conda install matplotlib
 conda install setuptools
 conda install thinker
 ```
+
+有的可能已经自带. 
