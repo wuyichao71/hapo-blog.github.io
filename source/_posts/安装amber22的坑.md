@@ -95,4 +95,37 @@ conda install setuptools
 conda install thinker
 ```
 
-有的可能已经自带. 
+有的python库可能已经自带. 经过以上的配置, amber22就能使用anaconda下现成的python环境, 不需要额外安装anaconda.
+
+## 其余的坑
+
+### Boost
+
+amber需要使用zlib和bzip2编译过的boost库. 集群上一般没有安装, 或者安装后也boost并没有使用zlib和bzip2编译, 因此amber22一般会自己编译. 如果你确定系统中的版本可用, 那么可以设置`-DFORCE_EXTERNAL_LIBS='boost'`. amber22要编译自己的boost库需要zlib和bzip2, 其中zlib的缺失会在`run_make`的过程中检查到, 而bzip2的缺失则会在编译的过程中才会报错. 如果这两个库在集群上缺失, 那么可以使用anaconda安装库.  
+
+```bash
+conda install zlib #zlib 在前面的配置环境的时候已经安装了.
+conda install bzip2
+```
+
+<!-- 为了能够找到这两个库, 还需要设置 -->
+
+<!-- ```bash
+export LD_LIBRARY_PATH=/path/to/anaconda3/env/amber/lib:$LD_LIBRARY_PATH
+``` -->
+
+### libSM
+
+在集群上, libSM库存在问题, 这会导致xaLeap编译出问题, 这时候我们可以使用anaconda安装该库文件.
+
+```bash
+conda install -c conda-forge xorg-libsm
+```
+
+并且设置如下两个变量： `-DX11_SM_INCLUDE_PATH=/path/to/anaconda/env/amber/include`和`-DX11_SM_LIB=/path/to/anaconda/env/amber/lib/libSM.so`
+
+并且设置`LD_LIBRARY_PATH`用于链接`libuuid.so`
+
+```bash
+export LD_LIBRARY_PATH=/path/to/anaconda3/env/amber/lib:$LD_LIBRARY_PATH
+```
