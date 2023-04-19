@@ -130,6 +130,14 @@ conda install -c conda-forge xorg-libsm
 export LD_LIBRARY_PATH=/path/to/anaconda3/env/amber/lib:$LD_LIBRARY_PATH
 ```
 
+> 这里实际上是系统的libsm库和uuid库的匹配有问题, 使用conda安装了libsm库后会下载uuid库, 而设置了`-DX11_SM_INCLUDE`、`-DX11_SM_LIB`和`LD_LIBRARY_PATH`后会使用anaconda下的libsm库并且会优先查找`/path/toanaconda3/env/amber/lib`下的uuid库. 通过使用`objdump -d /usr/lib64/libuuid.so.1`发现其中的函数名为`uuid_generate@@UUID_1.0`而不是`uuid_generate@UUID_1.0`.
+>
+> <font color='salmon'>更简单的方法是设置`-DCMAKE_PREFIX_PATH=/path/to/anaconda/env/amber/`来让cmake自动查找libsm库和uuid库, 这样就不用设置`-DX11_SM_LIB`和`-DX11_SM_INCLUDE_PATH`了, 也不需要设置系统的`LD_LIBRARY_PATH`.</font>
+>
+>> 实际上经过测试, 只设置了`-DX11_SM_INCLUDE`和`-DX11_SM_LIB`依旧会使用`/usr/lib64/libSM.so.1`.
+>>
+>> 只设置`LD_LIBRARY_PATH`也无法通过编译
+
 ### 一些额外的选项
 
 1. `-DTRUST_SYSTEM_LIBS`: 相信系统的库文件, 开启后会将某些库会使用系统中自带的(例如boost), 开启命令`-DTRUST_SYSTEM_LIBS=TRUE`
@@ -137,3 +145,14 @@ export LD_LIBRARY_PATH=/path/to/anaconda3/env/amber/lib:$LD_LIBRARY_PATH
 3. `-DFORCE_DISABLE_LIBS`: 关闭某些库文件, 使用`;`分隔开(注意用引号`'`引起来, 以防和bash冲突), 例如`-DFORCE_DISABLE_LIBS=boost`
 4. `-DFORCE_INTERNAL_LIBS`: 强制某些库文件使用内部编译, 例如`-DFORCE_INTERNAL_LIBS=zlib`
 5. `-DFORCE_EXTERNAL_LIBS`: 强制某些库文件使用外部编译, 例如`-DFORCE_INTERNAL_LIBS=zlib`
+
+### CUDA与INTEL编译器版本问题
+
+`run_cmake`会检查编译器的版本和CUDA版本, 如果版本不适配则会配置不通过. 但是当你使用intel编译器时, 它依旧是按照gnu的编译器版本在比较, 因此intel几乎无法编译cuda版本. 为了解决这个问题我们可以修改`/path/to/amber22_src/cmake/CudaConfig.cmake`文件的112行
+
+```cmake
+111             CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 12
+112             AND CUDA_VERSION VERSION_GREATER 11.6
+```
+
+将cuda的上限版本(11.6)调低即可.
