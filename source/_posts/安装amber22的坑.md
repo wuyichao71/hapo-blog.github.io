@@ -129,3 +129,11 @@ conda install -c conda-forge xorg-libsm
 ```bash
 export LD_LIBRARY_PATH=/path/to/anaconda3/env/amber/lib:$LD_LIBRARY_PATH
 ```
+
+### 一些额外的选项
+
+1. `-DTRUST_SYSTEM_LIBS`: 相信系统的库文件, 开启后会将某些库会使用系统中自带的(例如boost), 开启命令`-DTRUST_SYSTEM_LIBS=TRUE`
+2. `-DDISABLE_TOOLS`: 关闭一些工具的编译, 例如`-DDISABLE_TOOLS=cpptraj`
+3. `-DFORCE_DISABLE_LIBS`: 关闭某些库文件, 使用`;`分隔开(注意用引号`'`引起来, 以防和bash冲突), 例如`-DFORCE_DISABLE_LIBS=boost`
+4. `-DFORCE_INTERNAL_LIBS`: 强制某些库文件使用内部编译, 例如`-DFORCE_INTERNAL_LIBS=zlib`
+5. `-DFORCE_EXTERNAL_LIBS`: 强制某些库文件使用外部编译, 例如`-DFORCE_INTERNAL_LIBS=zlib`
