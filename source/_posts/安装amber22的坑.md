@@ -155,4 +155,4 @@ export LD_LIBRARY_PATH=/path/to/anaconda3/env/amber/lib:$LD_LIBRARY_PATH
 112             AND CUDA_VERSION VERSION_GREATER 11.6
 ```
 
-将cuda的上限版本(11.6)调低即可.
+将cuda的上限版本(11.6)调低即可, 我一般调至11.0.
