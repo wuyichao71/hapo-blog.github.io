@@ -108,12 +108,6 @@ conda install zlib #zlib 在前面的配置环境的时候已经安装了.
 conda install bzip2
 ```
 
-<!-- 为了能够找到这两个库, 还需要设置 -->
-
-<!-- ```bash
-export LD_LIBRARY_PATH=/path/to/anaconda3/env/amber/lib:$LD_LIBRARY_PATH
-``` -->
-
 ### libSM
 
 在集群上, libSM库存在问题, 这会导致xaLeap编译出问题, 这时候我们可以使用anaconda安装该库文件.
