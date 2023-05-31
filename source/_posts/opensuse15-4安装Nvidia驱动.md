@@ -33,10 +33,10 @@ inxi -Ga
 
 # 安装
 现在查看下所需要的显卡驱动，显卡驱动的名字有如下含义:  
-1. G03 = driver v340 = legacy driver for GT8xxx/9xxx devices
-2. G04 = driver v390 = legacy driver for GTX4xx/5xx Fermi devices
-3. G05 = current driver for current devices
-4. G06 = covers all cards GT700 and up
+1. G03 = driver v340 = legacy driver for GT8xxx/9xxx devices  
+2. G04 = driver v390 = legacy driver for GTX4xx/5xx Fermi devices  
+3. G05 = current driver for current devices  
+4. G06 = covers all cards GT700 and up  
 
 可以用一下命令查看显卡驱动信息:
 ```bash
