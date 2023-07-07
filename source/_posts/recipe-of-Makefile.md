@@ -9,6 +9,7 @@ tags:
 ---
 
 `make` programe is used to manage huge program. The file named `Makefile` tells `make` what to do. The main content of `Makefile` is "rules" and "rules" have the following shape:
+<!--more-->
 ```make
 target  ...: prerequisites ...
     recipe
