@@ -16,11 +16,26 @@ catagories:
 如果使用的是华为路由器, 那么就可以使用华为智慧生活APP获得公网IP. 
 
 # 安装花生壳
-opensuse可以安装花生壳的rpm包, 但是需要做一些设置. 首先需要创建文件夹`/lib/systemd/system`, 其次需要安装`netstat`. 在opensuse上需要使用以下命令:
+opensuse可以安装花生壳的rpm包, 可以去[官网](https://hsk.oray.com/download)下载安装包. 之后需要做一些设置才能安装. 首先需要创建文件夹`/lib/systemd/system`, 其次需要安装`netstat`. 在opensuse上需要使用以下命令:
 ```bash
 sudo zypper in net-tools-deprecated
 ```
-这样才会在
+这样才会在有`netstat`.
+
+之后就可以使用
+
+```bash
+sudo rpm -i phddns_<version>.rpm
+```
+
+来安装了.
+
+卸载的命令是
+```bash
+sudo rpm -e phddns
+```
+
+> 这里有个小坑, 用花生壳做内网穿透的话, 如果ip和刚刚做DDNS的ip不一致, 那么会把前面的DDNS设置冲掉. 因为是坑所以就不介绍如何设置内网穿透了.
 
 # 安装向日葵
 
