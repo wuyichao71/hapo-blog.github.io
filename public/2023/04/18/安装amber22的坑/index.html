@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"hapoblog.fun","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="amber22已经把Amber部分开源了, 再加上最近需要使用amber, 所以将amber的安装研究了下, 经过两天的debug, 终于可以在集群上安装起来. 最基本的安装过程 amber22使用cmake进行构建程序, 这样的好处是不会破坏源程序文件夹, 并且amber22已经不需要再分开编译serial, mpi, cuda版本, 只要开启了相应的选项就能都编译出来. 在&#x2F;path&#x2F;to&#x2F;a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安装amber22的坑">
+<meta property="og:url" content="https://hapoblog.fun/2023/04/18/%E5%AE%89%E8%A3%85amber22%E7%9A%84%E5%9D%91/index.html">
+<meta property="og:site_name" content="Hapo&#39;s blog">
+<meta property="og:description" content="amber22已经把Amber部分开源了, 再加上最近需要使用amber, 所以将amber的安装研究了下, 经过两天的debug, 终于可以在集群上安装起来. 最基本的安装过程 amber22使用cmake进行构建程序, 这样的好处是不会破坏源程序文件夹, 并且amber22已经不需要再分开编译serial, mpi, cuda版本, 只要开启了相应的选项就能都编译出来. 在&#x2F;path&#x2F;to&#x2F;a">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-04-18T12:49:10.000Z">
+<meta property="article:modified_time" content="2023-04-29T06:11:36.468Z">
+<meta property="article:author" content="hapo">
+<meta property="article:tag" content="软件安装">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://hapoblog.fun/2023/04/18/%E5%AE%89%E8%A3%85amber22%E7%9A%84%E5%9D%91/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'cn'
+  };
+</script>
+
+  <title>安装amber22的坑 | Hapo's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hapo's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-主页">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a>
+
+  </li>
+        <li class="menu-item menu-item-关于">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-标签">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-类别">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>类别</a>
+
+  </li>
+        <li class="menu-item menu-item-归档">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-相册">
+
+    <a href="/gallery/" rel="section"><i class="fa fa-image fa-fw"></i>相册</a>
+
+  </li>
+        <li class="menu-item menu-item-日程表">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
+    <link itemprop="mainEntityOfPage" href="https://hapoblog.fun/2023/04/18/%E5%AE%89%E8%A3%85amber22%E7%9A%84%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="hapo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hapo's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          安装amber22的坑
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-04-18 21:49:10" itemprop="dateCreated datePublished" datetime="2023-04-18T21:49:10+09:00">2023-04-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-04-29 15:11:36" itemprop="dateModified" datetime="2023-04-29T15:11:36+09:00">2023-04-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%AD%90%E6%A8%A1%E6%8B%9F/" itemprop="url" rel="index"><span itemprop="name">分子模拟</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>amber22已经把Amber部分开源了, 再加上最近需要使用amber,
+所以将amber的安装研究了下, 经过两天的debug,
+终于可以在集群上安装起来.</p>
+<h2 id="最基本的安装过程">最基本的安装过程</h2>
+<p>amber22使用cmake进行构建程序, 这样的好处是不会破坏源程序文件夹,
+并且amber22已经不需要再分开编译serial, mpi, cuda版本,
+只要开启了相应的选项就能都编译出来.
+在<code>/path/to/amber22_src/build</code>中有<code>run_make</code>和<code>configure_make.py</code>两个文件.
+其中, <code>run_make</code>写了基本的编译命令,
+你需要对自己需要的选项进行修改从编译需要的版本,
+而<code>configure_make.py</code>则是一个<code>python</code>脚本,
+可以通过命令行设置对应的选项. 两个文件可以任意选一个进行configure.
+当编译出现问题时, 可以用<code>clean_build</code>清理掉生成的文件.</p>
+<p>最基本的安装命令是</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./run_make</span><br><span class="line">make install</span><br><span class="line"><span class="built_in">source</span> /path/to/amber/amber.sh</span><br></pre></td></tr></table></figure>
+<p>如果amber源文件夹为<code>/path/to/amber22_src</code>,
+则默认安装好的文件夹在<code>/path/to/amber</code>. <span id="more"></span></p>
+<h2 id="配置python">配置python</h2>
+<p>amber22的一些程序需要python环境, 有很多方法可以python环境.</p>
+<h3 id="section">1</h3>
+<p>amber22默认会下载miniconda, 这样可以搭建出amber22适配的环境.
+安装完成后会生成一个<code>amber.python</code>软连接,
+这样可以和系统默认的python区分开. 但是在hpcc集群上没有办法连接外网,
+此时可以如下操作: (1)
+在<code>amber22_src/build</code>下新建文件夹<code>CMakeFiles/miniconda/download/</code>,
+下载好<code>Miniconda3-latest-Linux-x86_64.sh</code>放入该文件夹中,
+之后cmake会认为该文件已下载好, 从而跳过下载过程. (2)
+修改<code>amber22_src/cmake</code>文件夹下的<code>UseMiniconda.cmake</code>文件,
+修改91行</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">91</span>  <span class="keyword">set</span>(INSTALLER_URL <span class="string">&quot;http://repo.continuum.io/miniconda/$&#123;MINICONDA_INSTALLER_FILENAME&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>例如修改成如下</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">91</span>  <span class="keyword">set</span>(INSTALLER_URL <span class="string">&quot;http://mirrors.nju.edu.cn/anaconda/miniconda/$&#123;MINICONDA_INSTALLER_FILENAME&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>之后会下载一些miniconda需要的python库. 因为hpcc集群上无法连接外网,
+因此我们可以配置成内网的镜像.
+可以修改家目录下的<code>.condarc</code>文件</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">channels<span class="punctuation">:</span></span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls<span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">default_channels<span class="punctuation">:</span></span><br><span class="line">  - https<span class="punctuation">:</span><span class="comment">//mirror.nju.edu.cn/anaconda/pkgs/main</span></span><br><span class="line">  - https<span class="punctuation">:</span><span class="comment">//mirror.nju.edu.cn/anaconda/pkgs/r</span></span><br><span class="line">  - https<span class="punctuation">:</span><span class="comment">//mirror.nju.edu.cn/anaconda/pkgs/msys2</span></span><br><span class="line">custom_channels<span class="punctuation">:</span></span><br><span class="line">  conda-forge<span class="punctuation">:</span> https<span class="punctuation">:</span><span class="comment">//mirror.nju.edu.cn/anaconda/cloud</span></span><br><span class="line">  msys2<span class="punctuation">:</span> https<span class="punctuation">:</span><span class="comment">//mirror.nju.edu.cn/anaconda/cloud</span></span><br><span class="line">  bioconda<span class="punctuation">:</span> https<span class="punctuation">:</span><span class="comment">//mirror.nju.edu.cn/anaconda/cloud</span></span><br><span class="line">  menpo<span class="punctuation">:</span> https<span class="punctuation">:</span><span class="comment">//mirror.nju.edu.cn/anaconda/cloud</span></span><br><span class="line">  pytorch<span class="punctuation">:</span> https<span class="punctuation">:</span><span class="comment">//mirror.nju.edu.cn/anaconda/cloud</span></span><br><span class="line">  simpleitk<span class="punctuation">:</span> https<span class="punctuation">:</span><span class="comment">//mirror.nju.edu.cn/anaconda/cloud</span></span><br></pre></td></tr></table></figure>
+<p>以及配置pip</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip config <span class="built_in">set</span> global.index-url https://mirror.nju.edu.cn/pypi/web/simple/</span><br></pre></td></tr></table></figure>
+<p>此时会在家目录下生成如下配置文件<code>～/.config/pip/pip.conf</code>,
+其中内容为</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span>global<span class="punctuation">]</span></span><br><span class="line">index-url = https<span class="punctuation">:</span><span class="comment">//mirror.nju.edu.cn/pypi/web/simple/</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这样后使用miniconda的python环境就可以顺利安装了.</p>
+<h3 id="section-1">2</h3>
+<p>如果已经在本地装过anaconda,
+那么我们就可以用anaconda生成一个安装amber22的本地环境,
+这样可以和已经安装过的python库同时在一个环境下使用.
+使用本地python环境需要设置如下的选项<code>-DDOWNLOAD_MINICONDA=FALSE</code>(不下载miniconda)和<code>-DUSE_CONDA_LIBS=TRUE</code>(使用conda的python库).
+可以用以下命令生成一个新的环境.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda create -n amber python=3.10</span><br><span class="line">conda activate amber</span><br></pre></td></tr></table></figure>
+<p>amber22的安装需要一些python库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda install numpy</span><br><span class="line">conda install scipy</span><br><span class="line">conda install matplotlib</span><br><span class="line">conda install setuptools</span><br><span class="line">conda install thinker</span><br></pre></td></tr></table></figure>
+<p>有的python库可能已经自带. 经过以上的配置,
+amber22就能使用anaconda下现成的python环境, 不需要额外安装anaconda.</p>
+<h2 id="其余的坑">其余的坑</h2>
+<h3 id="boost">Boost</h3>
+<p>amber需要使用zlib和bzip2编译过的boost库. 集群上一般没有安装,
+或者安装后也boost并没有使用zlib和bzip2编译, 因此amber22一般会自己编译.
+如果你确定系统中的版本可用,
+那么可以设置<code>-DFORCE_EXTERNAL_LIBS='boost'</code>.
+amber22要编译自己的boost库需要zlib和bzip2,
+其中zlib的缺失会在<code>run_make</code>的过程中检查到,
+而bzip2的缺失则会在编译的过程中才会报错. 如果这两个库在集群上缺失,
+那么可以使用anaconda安装库.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda install zlib <span class="comment">#zlib 在前面的配置环境的时候已经安装了.</span></span><br><span class="line">conda install bzip2</span><br></pre></td></tr></table></figure>
+<h3 id="libsm">libSM</h3>
+<p>在集群上, libSM库存在问题, 这会导致xaLeap编译出问题,
+这时候我们可以使用anaconda安装该库文件.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install -c conda-forge xorg-libsm</span><br></pre></td></tr></table></figure>
+<p>并且设置如下两个变量：
+<code>-DX11_SM_INCLUDE_PATH=/path/to/anaconda/env/amber/include</code>和<code>-DX11_SM_LIB=/path/to/anaconda/env/amber/lib/libSM.so</code></p>
+<p>并且设置<code>LD_LIBRARY_PATH</code>用于链接<code>libuuid.so</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/path/to/anaconda3/env/amber/lib:<span class="variable">$LD_LIBRARY_PATH</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里实际上是系统的libsm库和uuid库的匹配有问题,
+使用conda安装了libsm库后会下载uuid库,
+而设置了<code>-DX11_SM_INCLUDE</code>、<code>-DX11_SM_LIB</code>和<code>LD_LIBRARY_PATH</code>后会使用anaconda下的libsm库并且会优先查找<code>/path/toanaconda3/env/amber/lib</code>下的uuid库.
+通过使用<code>objdump -d /usr/lib64/libuuid.so.1</code>发现其中的函数名为<code>uuid_generate@@UUID_1.0</code>而不是<code>uuid_generate@UUID_1.0</code>.</p>
+<p><font color='salmon'>更简单的方法是设置<code>-DCMAKE_PREFIX_PATH=/path/to/anaconda/env/amber/</code>来让cmake自动查找libsm库和uuid库,
+这样就不用设置<code>-DX11_SM_LIB</code>和<code>-DX11_SM_INCLUDE_PATH</code>了,
+也不需要设置系统的<code>LD_LIBRARY_PATH</code>.</font></p>
+<blockquote>
+<p>实际上经过测试,
+只设置了<code>-DX11_SM_INCLUDE</code>和<code>-DX11_SM_LIB</code>依旧会使用<code>/usr/lib64/libSM.so.1</code>.</p>
+<p>只设置<code>LD_LIBRARY_PATH</code>也无法通过编译</p>
+</blockquote>
+</blockquote>
+<h3 id="一些额外的选项">一些额外的选项</h3>
+<ol type="1">
+<li><code>-DTRUST_SYSTEM_LIBS</code>: 相信系统的库文件,
+开启后会将某些库会使用系统中自带的(例如boost),
+开启命令<code>-DTRUST_SYSTEM_LIBS=TRUE</code></li>
+<li><code>-DDISABLE_TOOLS</code>: 关闭一些工具的编译,
+例如<code>-DDISABLE_TOOLS=cpptraj</code></li>
+<li><code>-DFORCE_DISABLE_LIBS</code>: 关闭某些库文件,
+使用<code>;</code>分隔开(注意用引号<code>'</code>引起来,
+以防和bash冲突), 例如<code>-DFORCE_DISABLE_LIBS=boost</code></li>
+<li><code>-DFORCE_INTERNAL_LIBS</code>: 强制某些库文件使用内部编译,
+例如<code>-DFORCE_INTERNAL_LIBS=zlib</code></li>
+<li><code>-DFORCE_EXTERNAL_LIBS</code>: 强制某些库文件使用外部编译,
+例如<code>-DFORCE_INTERNAL_LIBS=zlib</code></li>
+</ol>
+<h3 id="cuda与intel编译器版本问题">CUDA与INTEL编译器版本问题</h3>
+<p><code>run_cmake</code>会检查编译器的版本和CUDA版本,
+如果版本不适配则会配置不通过. 但是当你使用intel编译器时,
+它依旧是按照gnu的编译器版本在比较, 因此intel几乎无法编译cuda版本.
+为了解决这个问题我们可以修改<code>/path/to/amber22_src/cmake/CudaConfig.cmake</code>文件的112行</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">111</span>             CMAKE_CXX_COMPILER_VERSION <span class="keyword">VERSION_GREATER_EQUAL</span> <span class="number">12</span></span><br><span class="line"><span class="number">112</span>             <span class="keyword">AND</span> CUDA_VERSION <span class="keyword">VERSION_GREATER</span> <span class="number">11.6</span></span><br></pre></td></tr></table></figure>
+<p>将cuda的上限版本(11.6)调低即可, 我一般调至11.0.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" rel="tag"># 软件安装</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/03/01/ssh%E7%99%BB%E9%99%86%E7%9B%B8%E5%85%B3/" rel="prev" title="ssh登陆相关">
+      <i class="fa fa-chevron-left"></i> ssh登陆相关
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/08/07/%E5%9C%A8opensuse%E4%B8%8A%E5%A4%96%E7%BD%91%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/" rel="next" title="在opensuse上外网远程连接">
+      在opensuse上外网远程连接 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">最基本的安装过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEpython"><span class="nav-number">2.</span> <span class="nav-text">配置python</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#section"><span class="nav-number">2.1.</span> <span class="nav-text">1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#section-1"><span class="nav-number">2.2.</span> <span class="nav-text">2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BD%99%E7%9A%84%E5%9D%91"><span class="nav-number">3.</span> <span class="nav-text">其余的坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#boost"><span class="nav-number">3.1.</span> <span class="nav-text">Boost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#libsm"><span class="nav-number">3.2.</span> <span class="nav-text">libSM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E9%A2%9D%E5%A4%96%E7%9A%84%E9%80%89%E9%A1%B9"><span class="nav-number">3.3.</span> <span class="nav-text">一些额外的选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cuda%E4%B8%8Eintel%E7%BC%96%E8%AF%91%E5%99%A8%E7%89%88%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="nav-number">3.4.</span> <span class="nav-text">CUDA与INTEL编译器版本问题</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hapo"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">hapo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hapo</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
