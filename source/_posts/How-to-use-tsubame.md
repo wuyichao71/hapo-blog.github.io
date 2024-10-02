@@ -21,8 +21,11 @@ t4-user-info group point
 t4-user-info disk home
 ```
 
+<!--more-->
+
 ### Check the usage status of group disk
 
 ```bash
 t4-user-info disk group
 ```
+
