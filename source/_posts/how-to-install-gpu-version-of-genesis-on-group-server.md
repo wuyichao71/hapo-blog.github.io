@@ -26,6 +26,8 @@ source /opt/intel/oneapi/setvars.sh
 export LD_LIBRARY_PATH=/your/miniconda/envs/cuda_11/lib:$LD_LIBRARY_PATH
 ```
 
+## Compile genesis
+
 Then we can compile `genesis` use below command
 ```bash
 ./configure --enable-gpu --enable-mixed --program-suffix='-intel-mixed-cuda11-conda'
