@@ -7,5 +7,5 @@ date: 2025-06-20 02:04:15
 
 - [Blog](https://wuyichao71.github.io)
 - [Catbook](https://wuyichao71.github.io/catbook)
-- [GameBoard](https://wuyichao71.github.io/gameboard)
+- [GameBoard](https://wuyichao71.github.io/gameBoard)
 - [md_library](https://github.com/wuyichao71/md_library)

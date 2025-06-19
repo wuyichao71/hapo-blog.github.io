@@ -123,7 +123,7 @@ menu:
   归档: /archives/ || fa fa-archive
   相册: /gallery/ || fa fa-image
   日程表: /schedule/ || fa fa-calendar
-  项目: /projects/ || fa-solid fa-diagram-project
+  项目: /projects/ || fa fa-sitemap
   # sitemap: /sitemap.xml || fa fa-sitemap
   # commonweal: /404/ || fa fa-heartbeat
 
