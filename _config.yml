@@ -103,8 +103,9 @@ theme: next
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  # repo: git@github.com:wuyichao71/hapo.github.io.git
-  # branch: master
+  repo: git@github.com:wuyichao71/wuyichao71.github.io.git
+  branch: gh-pages
+  message: "deploy: {{ now('YYY-MM-DD HH:mm:ss') }}"
 
 # Search Config
 search:
