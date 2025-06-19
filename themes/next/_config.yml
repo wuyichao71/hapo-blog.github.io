@@ -123,8 +123,9 @@ menu:
   归档: /archives/ || fa fa-archive
   相册: /gallery/ || fa fa-image
   日程表: /schedule/ || fa fa-calendar
-  #sitemap: /sitemap.xml || fa fa-sitemap
-  #commonweal: /404/ || fa fa-heartbeat
+  项目: /projects/ || fa fa-diagram-project
+  sitemap: /sitemap.xml || fa fa-sitemap
+  commonweal: /404/ || fa fa-heartbeat
 
 # Enable / Disable menu icons / item badges.
 menu_settings:
