@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"hapoblog.fun","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="密钥登陆 linux下可以使用ssh远程登陆集群, 为了登陆方便, 我们可以使用密钥, 生成密钥的命令为: 1ssh-keygen 其中需要输入文件名和key的类型。 使用ssh-copy-id命令可以将filename.pub公钥分发给远程主机: 1ssh-copy-id hapo@webserver1 以上命令会将默认公钥分发过去, 也可以使用 1ssh-copy-id -i ~&#x2F;.ssh&#x2F;f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssh登陆相关">
+<meta property="og:url" content="https://hapoblog.fun/2023/03/01/ssh%E7%99%BB%E9%99%86%E7%9B%B8%E5%85%B3/index.html">
+<meta property="og:site_name" content="Hapo&#39;s blog">
+<meta property="og:description" content="密钥登陆 linux下可以使用ssh远程登陆集群, 为了登陆方便, 我们可以使用密钥, 生成密钥的命令为: 1ssh-keygen 其中需要输入文件名和key的类型。 使用ssh-copy-id命令可以将filename.pub公钥分发给远程主机: 1ssh-copy-id hapo@webserver1 以上命令会将默认公钥分发过去, 也可以使用 1ssh-copy-id -i ~&#x2F;.ssh&#x2F;f">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-03-01T05:50:51.000Z">
+<meta property="article:modified_time" content="2023-04-07T04:17:44.844Z">
+<meta property="article:author" content="hapo">
+<meta property="article:tag" content="ssh">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://hapoblog.fun/2023/03/01/ssh%E7%99%BB%E9%99%86%E7%9B%B8%E5%85%B3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'cn'
+  };
+</script>
+
+  <title>ssh登陆相关 | Hapo's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Navigationsleiste an/ausschalten">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hapo's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-主页">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a>
+
+  </li>
+        <li class="menu-item menu-item-关于">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-标签">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-类别">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>类别</a>
+
+  </li>
+        <li class="menu-item menu-item-归档">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-相册">
+
+    <a href="/gallery/" rel="section"><i class="fa fa-image fa-fw"></i>相册</a>
+
+  </li>
+        <li class="menu-item menu-item-日程表">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Suche
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Suche..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
+    <link itemprop="mainEntityOfPage" href="https://hapoblog.fun/2023/03/01/ssh%E7%99%BB%E9%99%86%E7%9B%B8%E5%85%B3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="hapo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hapo's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ssh登陆相关
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              <time title="Erstellt: 2023-03-01 14:50:51" itemprop="dateCreated datePublished" datetime="2023-03-01T14:50:51+09:00">2023-03-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2023-04-07 13:17:44" itemprop="dateModified" datetime="2023-04-07T13:17:44+09:00">2023-04-07</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="密钥登陆">密钥登陆</h1>
+<p>linux下可以使用ssh远程登陆集群, 为了登陆方便, 我们可以使用密钥,
+生成密钥的命令为: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen</span><br></pre></td></tr></table></figure> 其中需要输入文件名和key的类型。<br />
+使用<code>ssh-copy-id</code>命令可以将<code>filename.pub</code>公钥分发给远程主机:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id hapo@webserver1</span><br></pre></td></tr></table></figure> 以上命令会将默认公钥分发过去, 也可以使用 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i ~/.ssh/filename.pub hapo@webserver1</span><br></pre></td></tr></table></figure>
+指定需要分发的公钥。<br />
+此时就能不需要密码登陆远程服务器,
+若密钥名字不是默认的名字(<code>~/.ssh/id_rsa</code>等),
+则可以用以下命令指定: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i ~/.ssh/filename hapo@websever1</span><br></pre></td></tr></table></figure>
+另外可以使用以下命令查看密钥和公钥对应的指纹: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -l -f ~/.ssh/filename</span><br><span class="line">ssh-keygen -l -f ~/.ssh/filename.pub</span><br></pre></td></tr></table></figure> <span id="more"></span>
+# ssh配置文件
+可以在<code>~/.ssh/config</code>中写如下命令简化<code>ssh</code>登陆时所需参数:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Host hapo</span><br><span class="line">    HostName ip</span><br><span class="line">    Port 22</span><br><span class="line">    User hapo</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa</span><br><span class="line">    ServerAliveInterval 60 <span class="comment"># 每60秒发送一次空请求</span></span><br><span class="line">    ServerAliveCountMax 10 <span class="comment"># 断开时重新连接的次数</span></span><br></pre></td></tr></table></figure></p>
+<h1
+id="使用ssh-agent和ssh-add">使用<code>ssh-agent</code>和<code>ssh-add</code></h1>
+<p><code>ssh-agent</code>可以记录密钥的指纹,
+并且自动查找和发送到服务器端, 因此不需要在指定所使用的密钥。
+启动<code>ssh-agent</code>的命令为 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">eval</span> `ssh-agent`</span><br></pre></td></tr></table></figure>
+接下里就可以使用<code>ssh-add</code>添加密钥指纹 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-add <span class="comment">#添加默认的密钥指纹</span></span><br><span class="line">ssh-add ~/.ssh/id_rsa_1 <span class="comment">#指定密钥的指纹</span></span><br></pre></td></tr></table></figure>
+可以用以下命令查看添加过的密钥指纹 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add -L</span><br></pre></td></tr></table></figure>
+可以用以下命令修改添加过的密钥指纹 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-add -D <span class="comment"># 删除ssh-agent中的所有密钥指纹</span></span><br><span class="line">ssh-add -d key_file <span class="comment"># 删除指定密钥指纹</span></span><br></pre></td></tr></table></figure> 另外,
+杀掉现在正在运行的<code>ssh-agent</code>的命令为 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-agent -k</span><br></pre></td></tr></table></figure> #
+<code>oathtool</code> <code>oathtool</code>可以用于生成二次验证,
+其使用命令行是 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">oathtool -b --totp &lt;identity&gt;</span><br></pre></td></tr></table></figure>
+<code>&lt;identity&gt;</code>为用于生成二次验证的身份码。</p>
+<h1 id="sshpass"><code>sshpass</code></h1>
+<p><code>sshpass</code>可以用于在命令行输入密码, 命令行如下:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sshpass -p &lt;password&gt; &lt;user&gt;@&lt;hostname&gt;</span><br></pre></td></tr></table></figure> 通过结合<code>oathtool</code>, 可以实现免二次验证:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#！/bin/bash</span></span><br><span class="line">totp=`oathtool -b --totp &lt;identity&gt;`</span><br><span class="line">sshpass -p <span class="string">&quot;&lt;password&gt; <span class="variable">$totp</span>&quot;</span> &lt;user&gt;@&lt;hostname&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="expect"><code>expect</code></h1>
+<p><code>expect</code>命令可以用于与终端进行交互,
+<code>expect</code>使用的是tcl语言,
+这里不准备说明语法，只说明对应的一些用法</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/15/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8git/" rel="prev" title="如何使用git">
+      <i class="fa fa-chevron-left"></i> 如何使用git
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/04/18/%E5%AE%89%E8%A3%85amber22%E7%9A%84%E5%9D%91/" rel="next" title="安装amber22的坑">
+      安装amber22的坑 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Inhaltsverzeichnis
+        </li>
+        <li class="sidebar-nav-overview">
+          Übersicht
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%86%E9%92%A5%E7%99%BB%E9%99%86"><span class="nav-number">1.</span> <span class="nav-text">密钥登陆</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ssh-agent%E5%92%8Cssh-add"><span class="nav-number">2.</span> <span class="nav-text">使用ssh-agent和ssh-add</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sshpass"><span class="nav-number">3.</span> <span class="nav-text">sshpass</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#expect"><span class="nav-number">4.</span> <span class="nav-text">expect</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hapo"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">hapo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">Artikel</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">Kategorien</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">schlagwörter</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hapo</span>
+</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

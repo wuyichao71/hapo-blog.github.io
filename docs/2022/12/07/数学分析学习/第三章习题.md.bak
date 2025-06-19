@@ -1,0 +1,513 @@
+---
+title: 计算机系统基础第三章习题
+date: 2023-05-04 11:38:26
+mathjax: true
+categories:
+    - 计算机
+tags:
+    - 计算机系统基础
+---
+
+# 第三章
+## 1.
+**机器语言程序**: 由若干条机器指令组成的序列  
+**机器指令**: 介于微指令和伪指令之间的指令, 处于硬件和软件的交界面  
+**汇编语言**: 与机器语言一一对应的符号化表示语言  
+**汇编指令**: 用若干个助记符表表示的与机器指令一一对应的指令  
+<!--more--> 
+**汇编语言程序**: 用汇编语言编写的程序  
+**汇编助记符**: 用来表示指令操作码的容易记忆的英文单词或缩写, 用来表示操作数或地址码的标号、变量名称、寄存器名称、常数等  
+**汇编程序**: 用来将汇编语言源程序中的汇编指令翻译成机器指令的程序  
+**反汇编程序**: 机器指令反过来翻译成汇编指令的程序   
+**机器级代码**: 由机器指令和汇编指令组成的代码  
+**通用寄存器**: 没有专门用途的可以存放各类定点操作数的寄存器  
+**变址寄存器**: ESI  
+**基址寄存器**: EBP  
+**栈指针寄存器**: ESP  
+**指令指针寄存器**: EIP  
+**标志寄存器**: EFLAGS  
+**条件标志(条件码)**: 用来存放运行的状态信息, 由硬件自动设定  
+**寻址方式**: 根据指令给定信息得到操作数或操作数地址的方式  
+**立即寻址**: 指令中直接给出操作数  
+**寄存器寻址**: 指令中给出操作数所存放的寄存器的编号  
+**相对寻址**: 计算的是转移目标指令的线性地址  
+**存储器操作数**: 操作数在存储器单元中  
+**实地址模式**: 最大寻址空间为1MB, 存储管理采用分段方式, 每段的最大地址空间为64KB  
+**保护模式**: 为了实现在多任务方式下对不同任务使用的虚拟存储空间进行完全隔离, 以保护不同任务之间不会相互破坏各自的代码和数据  
+有效地址: 给出了操作数所在段的段内偏移地址  
+**比例变址**: 变址值等于变址寄存器内容乘以比例系数  
+**非比例变址**: 变址值就是变址寄存器的内容  
+**比例系数(比例因子)**: 操作数的字节个数  
+**MMX指令**: 每个MMX寄存器实际上是对应80位浮点数据寄存器中64位尾数所占的位  
+**SSE指令集**: 采用SIMD技术的指令集  
+**SIMD**: 单指令多数据, 实现单条指令同时并行处理多个数据元素的功能  
+**多媒体扩展通用寄存器**: 8个128位的SSE指令专用寄存器XMM0~XMM7  
+**栈**: 栈是一种采用"先进后出"方式访问的一块存储区  
+**调用者保存寄存器**: 在过程P调用过程Q时, Q可以直接使用这三个寄存器, 不用将它们的值保存到栈中  
+**被调用者保存寄存器**: Q必须将它们的值保存到栈中再使用它们, 并在返回P之前先恢复它们的值  
+**帧指针寄存器**: EBP  
+**当前栈帧**: 帧指针EBP和栈指针ESP指向区间之间的区域  
+**按值传递参数**: 形参是基本类型变量名  
+**按地址传递参数**: 形参是指针类型变量或构造类型变量名  
+**嵌套调用**: 某个函数调用另一个函数  
+**递归调用**: 某个函数调用自己本身  
+**缓冲区溢出**: 超越数组存储区范围的访问  
+**缓冲区溢出攻击**: 利用缓冲区溢出漏洞所进行的攻击行为  
+**栈随机化**: 程序加载的栈空间的起始位置随机变化的技术  
+**金丝雀值**: 在函数的准备阶段, 在其栈帧中的缓冲区底部与保存的寄存器状态之间加入一个随机生存的特定值  
+
+## 2.
+
+1. 机器指令通常由主操作码(OP)、ModR/M、SIM、位移和立即数. 主操作码表示进行的操作, Mod和R/M表示另一操作数的寻址方式. SIB确定比例因子、变址寄存器和基值寄存器. 位移字段给出位移量, 立即数字段用于给出指令中的一个源操作数.
+2. 预处理---编译---汇编---链接
+3. 仅NOT指令不影响条件标志符, 其他指令执行后, OF=CF=0, 而ZF和SF则根据运算结果来设置: 若结果为全0，则ZF=1; 若最高位为1, 则SF=1. 移位可能改变CF、OF、SF和ZF. 
+4. 条件转移指令以条件标志位的逻辑运算结果作为转移依据. 例如
+```C
+cmpl %eax %adx
+jge label
+```
+5. 调用指令是一种无条件转移指令, 它们都能改变程序执行顺序, CALL指令在跳转到被调用过程执行之前先要把返回地址压栈.
+6. 按值传递会把参数的值压入栈中, 而按地址传递则会将值的地址压入栈中.
+7. 递归调用的执行一直要等到满足跳出过程的条件才结束, 在这之前递归调用的非静态局部变量会一直保存在栈中, 直到过程执行结束才会释放. 同时, 每增加一次过程调用, 就要增加许多条包含在准备阶段和结束阶段的额外指令, 这些指令的执行实际开销对程序的性能影响很大. 
+8. 因为由于字宽的存储器限制, 为了避免由于多次访存带来指令执行效率的降低, 编译器会进行对齐.
+9. 对数组的引用没有边界约束.
+
+## 3.
+(1) movw, 基址加比例变址加位移, 寄存器寻址
+(2) movb, 寄存器寻址, 基址加位移
+(3) addl, 比例变址加位移, 寄存器寻址
+(4) orb, 基址寻址, 寄存器寻址
+(5) pushl, 立即数寻址
+(6) movl, 立即数寻址, 寄存器寻址
+(7) testw, 寄存器寻址, 寄存器寻址
+(8) leal, 基址加变址加位移, 寄存器寻址
+
+## 4.
+(1) 立即数寻址前要加%, `movl $0xFF, (%eax)`
+(2) 操作数和寄存器的长度不符, `movw %ax, 12(%ebp)`
+(3) 操作数2不能是立即数, `addl $0xF0, %ecx`
+(4) 立即数长度超出操作数长度, `orl $0xFFFF0, ($ebx)`
+(5) 基址寄存器需要时通用寄存器, `addb $0xF8, ($edi)`
+(6) 两个操作数长度不匹配, `movl %ebx, %eax`
+(7) 不存在esx寄存器, `addl %esi, %eax`
+(8) 缺失变址寄存器, `movw 8(%ebp), %ax`
+
+## 5.
+| src_type | dst_type | 机器级表示 |
+| ---- | ---- | ---- |
+| char | int  | `movsbl %al, (%edx)` |
+| int  | char | `movb %al, (%edx)` |
+| int  | unsigned | `movl %eax, (%edx)` |
+| short | int | `movswl %ax, (%edx)` |
+| unsigned char | unsigned | `movzbl %al, (%adx)` |
+| char | unsigned | `movsbl %al, (%adx)` |
+| int  | int  | `movl %eax, (%adx)` |
+
+## 6.
+(1) zptr对应的实参储存在`16(%ebp)`, yptr对应的实参储存在`12(%ebp)`, xptr对应实参储存在`8(%ebp)`
+(2) 
+```C
+void func(int *xptr, int *yptr, int *zptr)
+{
+  int temp1 = *xptr, temp2 = *yptr, temp3 = *zptr;
+  *yptr = temp1;
+  *zptr = temp2;
+  *xptr = temp3;
+}
+```
+
+## 7.
+(1) `x`
+(2) `x + y + 4`
+(3) `x + 8 * y`
+(4) `x + 2 * y + 12`
+(5) `4 * x`
+(6) `x + y`
+
+## 8.
+(1) `%edx`, `0x00000070`, `OF = 0, SF = 0, ZF = 0, CF = 0`
+(2) `%ecx`, `0x80000008`, `OF = 1, SF = 1, ZF = 0, CF = 0`
+(3) `%bx`,  `0xff00`,     `OF = 0, SF = 1, ZF = 0, CF = 0`
+(4) None, `OF = 0, SF = 1, ZF = 0, CF = 0`
+(5) `%ecx`, `0x11e25500`, `OF = 1, SF = 0, ZF = 0, CF = 1`
+(6) `%eax`, `0x00930000`, `OF = 1, SF = 0, ZF = 0, CF = 1`
+(7) `%cx`, `0xf`, `OF = 0, SF = 0, ZF = 0`
+
+## 9.
+```assembly
+movl 12(%ebp), %ecx # R[ecx]<--M[R[ebp]+12], 即R[ecx]=y
+sall $8, %ecx       # R[ecx]<--R[ecx]<<8, 即R[ecx]=y<<8
+movl 8(%ebp), %eax  # R[eax]<--M[R[ebx]+8], 即R[eax]=x
+movl 20(%ebp), %edx # R[edx]<--M[R[ebx]+20], 即R[edx]=k
+imull %edx, %eax    # R[eax]<--R[eax]*R[edx], 即R[eax]=k*x
+movl 16(%ebp), %edx # R[edx]<--M[R[ebp]+16], 即R[edx]=z
+andl $66520, %edx   # R[edx]<--R[edx]&0xfff0, 即R[edx]=z&0xfff0
+addl %ecx, %edx     # R[edx]<--R[edx]+R[ecx], 即R[edx]=(y<<8)+(z&0xfff0)
+subl %adx, %eax     # R[eax]<--R[eax]-R[edx], 即R[eax]=(k*x)-((y<<8)+(z&0xfff0))
+```
+
+```C
+int operate(int x, int y, int z, int k)
+{
+  int v = (k*x)-((y<<8)+(z&0xfff0));
+  return v;
+}
+```
+
+## 10.
+```assembly
+movl 12(%ebp), %eax # R[eax]<--M[R[ebp]+12], 即R[eax]=x
+movl 29(%ebp), %ecx # R[ecx]<--M[R[ebp]+20], 即将y的高32位赋值给R[ecx]
+imull %eax, %ecx    # R[ecx]<--R[ecx]*R[eax], 即将y的高32位乘以x
+mull 16(%ebp)       # 将y的低32位乘以x, 将低32位储存在R[eax], 将高32位储存在R[edx]
+leal (%ecx, %edx), %edx # R[edx]<--R[ecx]+R[edx], 即将结果的高32位相加
+movl 8(%ebp), %ecx  # R[ecx]<--M[R[ebp]+8], 即将d传入R[ecx]
+movl %eax, (%ecx)   # M[R[ecx]]<--R[eax], 即将结果的低32位传入d指向的位置的底32位
+movl %edx, 4(%ecx)  # M[R[ecx]+4]<--R[edx], 即将结果的高32位传入d指向的位置的高32位
+```
+num_type是`unsigned long long int`
+
+## 11.
+(1) `0x8048394`, `0x804838e+5+1e`
+(2) `0x8048386`, 指令中的`00 ao 04 08`直接指定了地址, `01`指定了立即数
+(3) `0x80492cc`
+(4) `0x8048196`
+
+## 12.
+(1)
+```assembly
+movb 8(%ebp), %dl # R[dl]<--M[R[ebp]+8], 即R[dl]=x
+movl 12(%ebp), %eax # R[eax]<--M[R[ebp]+12], 即R[eax]=p
+testl %eax, %eax # 判断p是否为0
+je .L1 # ZF=0时跳转到.L1
+testb $0x80, $dl # 判断x是否小于0
+je .L1 # ZF=0时跳转到.L1
+addb %dl, (%eax) # M[R[eax]]<--M[R[eax]]+R[dl]
+.L1
+```
+因为if中有两条判断指令
+(2)
+```C
+if(!p)
+  goto false_label;
+if(x>=0)
+  goto false_label;
+*p += x;
+false_label:
+```
+
+## 13.
+```C
+int func(int x, int y)
+{
+  int z = x;
+  if (z <= -100){
+    if (y > z)
+      z = z + y;
+    else
+      z = z - y;
+
+  } else if (1)
+    z = z < 16 ? z * y : z & y;
+  return z;
+}
+```
+
+## 14.
+(1)
+```assembly
+movw 8(%ebp), %bx # R[bx]<--M[R[ebp]+8], R[bx]=x
+movw 12(%ebp), %si # R[si]<--M[R[ebp]+12], R[si]=y
+movw 16(%ebp), %cx # R[cx]<--M[R[ebp]+16], R[cx]=k
+.L1:
+movw %si, %dx # R[dx]<--R[si], R[dx]=y
+movw %dx, %ax # R[ax]<--R[dx], R[ax]=y
+sarw $15, %dx # 将R[dx]的值算数右移15位
+idiv %cx # R[dx]和R[ax]表示的值除以R[cx](k), 商储存在R[ax], 余数储存在R[dx]中
+imulw %dx, %bx # R[bx]<--R[dx]*R[bx]
+decw %cx # R[cx]<--R[cx]-1
+testw %cx, %cx # 判断R[cx]是否大于0
+jle .L2 # 若SF!=OF或ZF=0则跳转到.L2
+cmpw %cx, %si # 比较R[si](y)和R[cx](k)的大小
+jg .L1 # 若y>k时, 跳转到.L1
+.L2:
+movswl %bx, %eax # 将R[bx]中的按符号扩展到R[eax]中
+```
+
+(2) bx, si是被调用者保存寄存器, eax, cx, dx是调用者保存寄存器, bx, si必须保存到栈中
+(3) 因为idiv的操作数是16位数, 则除数保存在dx-ax中, DX寄存器算数右移15位是为了进行符号扩展
+
+## 15.
+```C
+int f1(unsigned x)
+{
+  int y = 0;
+  while (x != 0){
+    y ^= x;
+    x >>= 1;
+  }
+  return 1 && y;
+}
+```
+判断x二进制表示中1的奇偶个数, 奇为1, 偶为0
+
+## 16.
+函数sw中的switch共有6个分支, 处理.L7时取值为3,9, 处理.L2时为4,5, 处理.L3时为6, 处理.L4时为7, 处理.L5时为8, 处理.L6时为10. 标号为3,9,或者大于10时执行default语句. 4,5会执行同一标号, 3,9和大于10会执行同一标号.
+
+## 17.
+```C
+unsigned int test(char a, unsigned short b, unsigned short c, short *p)
+{
+  *p = a;
+  return b*c;
+}
+```
+
+## 18.
+(1) `0xbc00001c`, `0xbc00001c`, `0xbc000030`
+(2) `0xbc00001c`, `0xbbfffff4`, `0xbc000020`
+(3) y变量在`-8(%ebp)`, x变量在`-4(%ebp)`
+(4)
+|地址| 内容|
+|----|----|
+| 0xbc000020 | funct返回地址 |
+| 0xbc00001c(ebp) | 0xbc000030 |
+| 0xbc000018 | x = 0x16  |
+| 0xbc000014 | y = 0x100 |
+| 0xbc000010 ||
+| 0xbc00000c ||
+| 0xbc000008 ||
+| 0xbc000004 ||
+| 0xbc000000 ||
+| 0xbbfffffc | &y |
+| 0xbbfffff8 | &x |
+| 0xbbfffff4(esp) | 0x804c000 |
+
+## 19.
+```C
+int refunc(unsigned x) {
+  if (x == 0)
+    return 0;
+  unsigned nx = x / 2;
+  int rv = refunc(nx);
+  return nv + (1 & x);
+}
+```
+统计x二进制表示中1的个数. 
+
+## 20.
+|数组|元素大小(B)|数组大小(B)|起始地址|元素i的地址|
+| ---- | ---- | ---- | ---- | ---- |
+| char A[10] | 10 | 10 | &A[0] | &A[0]+i|
+| int B[100] | 100 | 400 | & B[0] | &B[0]+4*i|
+| short \*C[5] | 5 | 20 | &C[0] | &C[0]+4*i |
+| short \*\*D[6] | 6 | 24 | &D[0] | &D[0]+4*i|
+| long double E[10] | 10 | 120 | &E[0] | &E[0]+12*i|
+| long double \*F[10] | 10 | 40 | &F[0] | &F[0]+4*i|
+
+## 21.
+|表达式|类型|值|汇编代码|
+|----|----|----|----|
+|S|short \*|A~S~|`leal (%edx), %eax` |
+|S+i|short \*|A~S~+2*i| `leal (%edx, %ecx, 2), %eax` |
+|S[i]|short|M[A~S~+2*i]| `movw (%edx, %ecx, 2), %ax` |
+|&S[10]|short \*|A~S~+20| `leal 20(%edx), %eax` |
+|&S[i+2]|short \*|A~S~+2+i+4| `leal 4(%edx, %ecx, 2), %eax` |
+|&S[i]-S|int|i| `movl %ecx, %eax` |
+|S[4*i+4]|short|M[A~S~+8*i+8]| `movw 8(%edx, %ecx, 8), %eax` |
+|\*(S+i-2)|short|M[A~S~+2*i-4]| `movw -4(%edx, %ecx, 2), %eax` |
+
+## 22.
+M = 7, N = 5
+
+## 23.
+L = 18, M = 7, N = 9
+
+## 24.
+(1) M = 19, M储存在edi中, j储存在ecx中
+(2) 
+```C
+for(; j < M; i++) {
+    t = a[i][j];
+    a[i][j] = a[j][i]
+    a[j][i] = t;
+}
+```
+
+## 25.
+(1) 16, 成员p的偏移是0, s.x的偏移是4, s.y的偏移是8, next的偏移是12
+(2) 
+```C
+void np_init(struct node *np)
+{
+    np->s.x = np->s.y;
+    np->p = &(np->s.x);
+    np->next = np;
+}
+```
+
+## 26.
+|表达式EXPR|TYPE类型|汇编指令序列|
+|----|----|----|
+|uptr->s1.x|int| `movl (%eax), %eax`<br/>`movl %eax, (%edx)`|
+|uptr->s1.y|short|`movw 4(%eax), %ax`<br/>`movw %ax, (%edx)`|
+|&uptr->s1.z|short *|`leal 6(%eax), %eax`<br/>`movl %eax, (%edx)`|
+|uptr->s2.a|short *|`movl %eax, (%edx)`|
+|uptr->s2.a[uptr->s2.b]|short|`movl 4(%eax), %ecx`<br/>`movw (%eax, %ecx, 2), %cx`<br>`movw %cx, (%edx)`|
+|*uptr->s2.p|char|`movb 8(%eax), %al`<br/>`movb %al, (%edx)`|
+
+## 27.
+(1) s的偏移量是0, c的偏移量是2, i的偏移量是4, d的偏移量是8, 结构体总大小是12, 结构起始位置的对其要求是4的倍数.
+(2) i的偏移量是0, s的偏移量是4, c的偏移量是6, d的偏移量是7, 结构体总大小是8, 结构起始位置的对齐要求是4的倍数.
+(3) c的偏移量是0, s的偏移量是2, i的偏移量是4, d的偏移量是8, 结构体总大小是12, 结构起始位置的对齐要求是4的倍数.
+(4) s的偏移量是0, c的偏移量是6, 结构体总大小是8, 结构起始位置的对齐要求是2的倍数.
+(5) c的偏移量是0, s的偏移量是4, i的偏移量是8, d的偏移量是12, e的偏移量是16, 结构体总大小是24, 结构起始位置的对齐要求是4的倍数.
+(6) c的偏移量是0, s的偏移量是36, d的偏移量是40, 结构体总大小是44, 结构起始位置的对齐要求是4的倍数.
+
+## 28.
+c的偏移量是0, d的偏移量是8, i的偏移量是16, s的偏移量是20, p的偏移量是24, l的偏移量是28, g的偏移量是32, v的偏移量是40. 结构体总大小为48. 如下调整可以使得占用空间最小:
+```C
+struct {
+    double d;
+    long long g;
+    int i;
+    char *p;
+    long l;
+    void *v;
+    short s;
+    char c;
+} test;
+``` 
+
+## 29.
+(1)
+|地址|内容|
+|----|----|
+|0xbffc07f0|0x80485c8(返回地址)|
+|0xbffc07ec(EBP)|0xbffc0800(EBP旧值)|
+|0xbffc07e8|0x8(EDI旧值)|
+|0xbffc07e4|0x10(ESI旧值)|
+|0xbffc07e0|0x5(EBX旧值)|
+|0xbffc07dc||
+|0xbffc07d8|(buf)|
+|0xbffc07d4||
+|0xbffc07d0||
+|0xbffc07cc||
+|0xbffc07c8||
+|0xbffc07c4(ESP)|gets参数入口|
+
+(2)
+|地址|内容|
+|----|----|
+|0xbffc07f0|0x000D3938(返回地址)|
+|0xbffc07ec(EBP)|0x37363534(EBP旧值)|
+|0xbffc07e8|0x33323130(EDI旧值)|
+|0xbffc07e4|0x46454443(ESI旧值)|
+|0xbffc07e0|0x42413938(EBX旧值)|
+|0xbffc07dc|0x37363534|
+|0xbffc07d8|0x33323130(buf)|
+|0xbffc07d4||
+|0xbffc07d0||
+|0xbffc07cc||
+|0xbffc07c8||
+|0xbffc07c4(ESP)|gets参数入口|
+
+(3)
+正确返回地址是: `0x80485c8`
+得到了`0x000d3938`
+
+(4)
+EBP, EDI, ESI, EBX被破坏
+
+(5)
+malloc申请的长度应该为`strlen(buf)+1`, 最后应该赋值`result[strlen(buf)]=\0`, 应该检查result是否为`NULL`
+
+## 30.
+```C
+abc(int c, long long int *a, int *b);
+abc(unsigned int c, long long int *a, int *b);
+abc(int c, unsigned long long int *a, int *b);
+abc(unsigned int c, unsigned long long int *a, int *b);
+```
+
+## 31.
+(1)
+```assembly
+movl 8(%ebp), %edx # R[edx]<--M[R[ebp]+8], 即R[edx]=x
+movl 12(%ebp), %ecx # R[ecx]<--M[R[ebp]+12], 即R[ecx]=k
+movl $255, %esi # R[esi] = 255, R[esi] = val
+movl $-2147483648, %edi # R[edi] = -2147483648, R[edi] = i
+.L3:
+movl %edi, %eax # R[eax]<--R[edi], R[eax] = i
+andl %edx, %eax # R[eax]<--R[edx]&R[eax], R[eax]=x&i
+xorl %eax, %esi # R[esi]<--R[eax]^R[esi]
+movl %ecx, %ebx # R[ebx]<--R[ecx], R[ebx]=k
+shrl %bl, %edi # R[edi]<--R[edi]>>R[bl]
+test1 %edi, %edi # 判断R[edi]是否为0
+jne .L3
+movl %esi, %eax # R[eax]<--R[esi]
+```
+
+(2)
+x存放在EDX, k存放在ECX, val存放在ESI, i存放在EDI.
+(3)
+val=255, i=-2147483648
+(4)
+终止的条件是`i = 0`, i的修改`i = ((unsigned) i) >> (char) k`
+(5)
+```C
+int lproc(int x, int k)
+{
+    int val = 255;
+    int i;
+    for (i = -2147483648; i != 0; i = ((unsigned) i) >> (char) k) {
+        val ^= (x & i);
+    }
+    return val;
+}
+```
+
+## 32.
+LEN = 7
+```C
+typedef struct {
+    int idx;
+    int a[6];
+}
+```
+
+## 33.
+(1) n1.ptr的偏移量是0, n1.data1的偏移量是4, n2.data2的偏移量是0, n2.next的偏移量是4
+(2) node类型总大小占8字节
+(3)
+```C
+void chain_proc(union node *uptr) {
+    uptr->data1 = *(uptr->n2.next->n1.ptr) - uptr->data2;
+}
+```
+## 34.
+(1) tptr通过RDI传递
+(2)
+```C
+long trace(tree_ptr tptr)
+{
+    long int val = 0;
+    while (tptr != NULL)
+    {
+        val = tptr->val;
+        tptr = tptr->left;
+    }
+    return val;
+}
+```
+(3)
+取出二叉树最左的叶子的值.
+
+## 35.
+(1) 第6行将a的值解释成double型打印, 第7行将a的值按指转化为double型再打印
+(2) 略
+(3) 每次的结果不一致
+(4) 略
+(5) 略
+(6) 第6行对应于`movsd  -0x18(%rbp),%xmm0`, 第7行对应于`cvtsi2sd %eax,%xmm0`
+(7) 略

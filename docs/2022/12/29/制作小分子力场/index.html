@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"hapoblog.fun","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="新冠阳了，今天开始复建运动。先试着把小分子的力场文件构建起来吧。这是我并不熟悉的领域，所以需要学习好多教程。 获得PDB结构 这里我们主要是要制作醋酸盐(acetate)和甲铵盐(methylammonium)的力场，我们首先需要得到小分子的PDB结构，可以从PDB库中找到我们需要的小分子。醋酸盐和甲铵盐的代码分别为ACT和3P8。在网页上可以下载到.sdf文件，接下来可以使用openbabel将">
+<meta property="og:type" content="article">
+<meta property="og:title" content="制作小分子力场">
+<meta property="og:url" content="https://hapoblog.fun/2022/12/29/%E5%88%B6%E4%BD%9C%E5%B0%8F%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA/index.html">
+<meta property="og:site_name" content="Hapo&#39;s blog">
+<meta property="og:description" content="新冠阳了，今天开始复建运动。先试着把小分子的力场文件构建起来吧。这是我并不熟悉的领域，所以需要学习好多教程。 获得PDB结构 这里我们主要是要制作醋酸盐(acetate)和甲铵盐(methylammonium)的力场，我们首先需要得到小分子的PDB结构，可以从PDB库中找到我们需要的小分子。醋酸盐和甲铵盐的代码分别为ACT和3P8。在网页上可以下载到.sdf文件，接下来可以使用openbabel将">
+<meta property="og:locale">
+<meta property="og:image" content="https://hapoblog.fun/2022/12/29/%E5%88%B6%E4%BD%9C%E5%B0%8F%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA/openbabel.png">
+<meta property="og:image" content="https://hapoblog.fun/2022/12/29/%E5%88%B6%E4%BD%9C%E5%B0%8F%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA/LigParGen.png">
+<meta property="og:image" content="https://hapoblog.fun/2022/12/29/%E5%88%B6%E4%BD%9C%E5%B0%8F%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA/tppmktop.png">
+<meta property="article:published_time" content="2022-12-29T13:24:34.000Z">
+<meta property="article:modified_time" content="2023-02-06T12:40:04.782Z">
+<meta property="article:author" content="hapo">
+<meta property="article:tag" content="力场构建">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hapoblog.fun/2022/12/29/%E5%88%B6%E4%BD%9C%E5%B0%8F%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA/openbabel.png">
+
+<link rel="canonical" href="https://hapoblog.fun/2022/12/29/%E5%88%B6%E4%BD%9C%E5%B0%8F%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'cn'
+  };
+</script>
+
+  <title>制作小分子力场 | Hapo's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Navigationsleiste an/ausschalten">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hapo's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-主页">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>主页</a>
+
+  </li>
+        <li class="menu-item menu-item-关于">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-标签">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-类别">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>类别</a>
+
+  </li>
+        <li class="menu-item menu-item-归档">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-相册">
+
+    <a href="/gallery/" rel="section"><i class="fa fa-image fa-fw"></i>相册</a>
+
+  </li>
+        <li class="menu-item menu-item-日程表">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>日程表</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Suche
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Suche..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
+    <link itemprop="mainEntityOfPage" href="https://hapoblog.fun/2022/12/29/%E5%88%B6%E4%BD%9C%E5%B0%8F%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="hapo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hapo's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          制作小分子力场
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Veröffentlicht am</span>
+
+              <time title="Erstellt: 2022-12-29 22:24:34" itemprop="dateCreated datePublished" datetime="2022-12-29T22:24:34+09:00">2022-12-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2023-02-06 21:40:04" itemprop="dateModified" datetime="2023-02-06T21:40:04+09:00">2023-02-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">in</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%AD%90%E6%A8%A1%E6%8B%9F/" itemprop="url" rel="index"><span itemprop="name">分子模拟</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>新冠阳了，今天开始复建运动。先试着把小分子的力场文件构建起来吧。这是我并不熟悉的领域，所以需要学习好多教程。</p>
+<h1 id="获得pdb结构">获得PDB结构</h1>
+<p>这里我们主要是要制作醋酸盐(acetate)和甲铵盐(methylammonium)的力场，我们首先需要得到小分子的PDB结构，可以从<a target="_blank" rel="noopener" href="https://www.rcsb.org/">PDB库</a>中找到我们需要的小分子。醋酸盐和甲铵盐的代码分别为<a target="_blank" rel="noopener" href="https://www.rcsb.org/ligand/ACT">ACT</a>和<a target="_blank" rel="noopener" href="https://www.rcsb.org/ligand/3P8">3P8</a>。在网页上可以下载到<code>.sdf</code>文件，接下来可以使用openbabel将<code>.sdf</code>文件转化为<code>.pdb</code>坐标。
+<img src="/2022/12/29/%E5%88%B6%E4%BD%9C%E5%B0%8F%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA/openbabel.png" class="" title="使用openbebal转化文件格式"> <!-- ![使用openbebal转化文件格式](openbabel.png) -->
+<span id="more"></span> 这样就获得了对应的<code>.pdb</code>文件。</p>
+<p>此时由openbabel生成的acetate的<code>.pdb</code>文件如下:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">COMPND    ACT </span><br><span class="line">AUTHOR    GENERATED BY OPEN BABEL 3.1.1</span><br><span class="line">HETATM    1  C   UNL     1      -0.072   0.000   0.000  1.00  0.00           C  </span><br><span class="line">HETATM    2  O   UNL     1      -0.682   1.056   0.000  1.00  0.00           O  </span><br><span class="line">HETATM    3  O   UNL     1      -0.682  -1.056   0.000  1.00  0.00           O1-</span><br><span class="line">HETATM    4  C   UNL     1       1.435   0.000   0.000  1.00  0.00           C  </span><br><span class="line">HETATM    5  H   UNL     1       1.799   0.000   1.028  1.00  0.00           H  </span><br><span class="line">HETATM    6  H   UNL     1       1.799  -0.890  -0.514  1.00  0.00           H  </span><br><span class="line">HETATM    7  H   UNL     1       1.799   0.890  -0.514  1.00  0.00           H  </span><br><span class="line">CONECT    1    2    2    3    4                                       </span><br><span class="line">CONECT    2    1    1                                                 </span><br><span class="line">CONECT    3    1                                                      </span><br><span class="line">CONECT    4    1    5    6    7                                       </span><br><span class="line">CONECT    5    4                                                      </span><br><span class="line">CONECT    6    4                                                      </span><br><span class="line">CONECT    7    4                                                      </span><br><span class="line">MASTER        0    0    0    0    0    0    0    0    7    0    7    0</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<code>antechamber</code>对此时的pdb会识别出一些问题(比如类型出错)，因此我们手动对pdb进行一些修改，删除一些无用的信息，修改残基名和原子名，修改后的pdb文件内容如下:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ATOM      1  CA  ACT     1      -0.072   0.000   0.000  1.00  0.00           C  </span><br><span class="line">ATOM      2  OA1 ACT     1      -0.682   1.056   0.000  1.00  0.00           O  </span><br><span class="line">ATOM      3  OA2 ACT     1      -0.682  -1.056   0.000  1.00  0.00           O</span><br><span class="line">ATOM      4  CB  ACT     1       1.435   0.000   0.000  1.00  0.00           C  </span><br><span class="line">ATOM      5  HB1 ACT     1       1.799   0.000   1.028  1.00  0.00           H  </span><br><span class="line">ATOM      6  HB2 ACT     1       1.799  -0.890  -0.514  1.00  0.00           H  </span><br><span class="line">ATOM      7  HB3 ACT     1       1.799   0.890  -0.514  1.00  0.00           H </span><br></pre></td></tr></table></figure></p>
+<h1 id="amber力场不使用gaussian">AMBER力场(不使用Gaussian)</h1>
+<p>对于amber力场，可以使用AmberTools中的<code>antechamber</code>软件生成小分子的gaff力场。在生成<code>.mol2</code>文件之前，我们先对<code>.pdb</code>文件进行预处理。</p>
+<p>首先先用tleap转化下原子的名字, <code>tleap.in</code>文件中的内容如下:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">source leaprc.protein.ff14SB</span><br><span class="line">TMP = loadpdb ACT.pdb</span><br><span class="line">savepdb TMP ACT_tleap.pdb</span><br><span class="line">quit</span><br></pre></td></tr></table></figure> 用以下的命令生成<code>ACT_tleap.pdb</code>: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tleap -f tleap.in</span><br></pre></td></tr></table></figure>
+之后再用<code>reduce</code>补充H原子(实际上对于小分子即使手动删除貌似也不会补充):
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reduce ACT_tleap.pdb &gt;ACT_h.pdb</span><br></pre></td></tr></table></figure>
+之后我们可以使用<code>antechamber</code>软件生成<code>.mol2</code>文件，命令如下:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">antechamber -i ACT_h.pdb -<span class="keyword">fi</span> pdb -o ACT.mol2 -fo mol2 -c bcc -s 2 -nc -1</span><br></pre></td></tr></table></figure> 上面各个选项的意思分别为:<br>
+1. <code>-i ACT_h.pdb</code>: 指定输入3D结构文件名称。<br>
+2. <code>-fi pdb</code>: 指定输入文件格式为PDB格式。<br>
+3. <code>-o ACT.mol2</code>: 指定输出的文件名称。<br>
+4. <code>-fo mol2</code>:
+指定输出文件类型为<code>.mol2</code>类型。<br>
+5. <code>-c bcc</code>:
+指示antechamber使用AM1-BCC电荷模型来计算原子上的电荷。<br>
+6. <code>-s 2</code>:
+指示antechamber程序提供的状态信息的冗长度。我们选择提供更多信息(<code>2</code>)。<br>
+7. <code>-nc -1</code>: 指定净电荷数目为<code>-1</code>。</p>
+<p><code>ACT.mol2</code>文件包含了acetate残基的定义，包含了所有的电荷信息以及原子类型。之后会用它来生成<code>.prmtop</code>和<code>.inpcrd</code>文件。生成的<code>.mol2</code>文件如下:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@&lt;TRIPOS&gt;MOLECULE</span><br><span class="line">ACT</span><br><span class="line">    7     6     1     0     0</span><br><span class="line">SMALL</span><br><span class="line">bcc</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@&lt;TRIPOS&gt;ATOM</span><br><span class="line">      1 CA          -0.0720     0.0000     0.0000 c          1 ACT       0.901600</span><br><span class="line">      2 OA1         -0.6820     1.0560     0.0000 o          1 ACT      -0.861300</span><br><span class="line">      3 OA2         -0.6820    -1.0560     0.0000 o          1 ACT      -0.861300</span><br><span class="line">      4 CB           1.4350     0.0000     0.0000 c3         1 ACT      -0.200100</span><br><span class="line">      5 HB1          1.7990     0.0000     1.0280 hc         1 ACT       0.007033</span><br><span class="line">      6 HB2          1.7990    -0.8900    -0.5140 hc         1 ACT       0.007033</span><br><span class="line">      7 HB3          1.7990     0.8900    -0.5140 hc         1 ACT       0.007033</span><br><span class="line">@&lt;TRIPOS&gt;BOND</span><br><span class="line">     1     1     2 1   </span><br><span class="line">     2     1     3 1   </span><br><span class="line">     3     1     4 1   </span><br><span class="line">     4     4     5 1   </span><br><span class="line">     5     4     6 1   </span><br><span class="line">     6     4     7 1   </span><br><span class="line">@&lt;TRIPOS&gt;SUBSTRUCTURE</span><br><span class="line">     1 ACT         1 TEMP              0 ****  ****    0 ROOT</span><br></pre></td></tr></table></figure>
+<code>.mol</code>文件的第一列是原子序号，第二列为原子名称，第三到五列为三维坐标，第六列为原子类型，最后一列为原子的电荷。并且<code>.mol2</code>文件还记录了成键信息，但是并不包含对应的参数，GAFF的参数都在<code>$AMBERHOME/dat/leap/parm/gaff.dat</code>中定义。</p>
+<p>参数文件可能会并未包含所需要的参数，因此需要参数进行检查，可以使用<code>parmchk2</code>检查缺失的参数，命令如下:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parmchk2 -i ACT.mol2 -f mol2 -o ACT.frcmod</span><br></pre></td></tr></table></figure>
+执行以上文件会生成<code>ACT.frcmod</code>文件。这是一个参数文件,
+能够载入LEaP中用于添加缺失的参数,
+这样就能包含所有缺失的参数。在模拟之前，需要仔细检查<code>ACT.frcmod</code>文件。生成的<code>ACT.frcmod</code>文件如下:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Remark line goes here</span><br><span class="line">MASS</span><br><span class="line"></span><br><span class="line">BOND</span><br><span class="line"></span><br><span class="line">ANGLE</span><br><span class="line"></span><br><span class="line">DIHE</span><br><span class="line"></span><br><span class="line">IMPROPER</span><br><span class="line">c3-o -c -o          1.1          180.0         2.0          Using general improper torsional angle  X- o- c- o, penalty score=  3.0)</span><br><span class="line"></span><br><span class="line">NONBON</span><br></pre></td></tr></table></figure>
+可以看到缺失了一个反常二面角，假定antechamber建议的参数可以接受，无需修改。</p>
+<p>现在我们已经准备好了acetate作为一个单元的所有工作，只需运行tleap保证GAFF力场可以工作即可。运行以下命令:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tleap -f leaprc.protein.ff14SB</span><br></pre></td></tr></table></figure></p>
+<p>之后在tleap中导入GAFF力场: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source leaprc.gaff</span><br></pre></td></tr></table></figure> 现在导入acetate单元:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ACT = loadmol2 ACT.mol2</span><br></pre></td></tr></table></figure>
+此时在<code>tleap</code>中键入<code>list</code>，可以看到新增加的<code>ACT</code>单元:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt; ACT = loadmol2 ACT.mol2</span><br><span class="line">Loading Mol2 file: ./ACT.mol2</span><br><span class="line">Reading MOLECULE named ACT</span><br><span class="line">&gt; list</span><br><span class="line">ACE       ACT       ALA       ARG       ASH       ASN       ASP       CALA</span><br><span class="line">CARG      CASN      CASP      CCYS      CCYX      CGLN      CGLU      CGLY</span><br><span class="line">CHID      CHIE      CHIP      CHIS      CHYP      CILE      CLEU      CLYS</span><br><span class="line">CMET      CPHE      CPRO      CSER      CTHR      CTRP      CTYR      CVAL</span><br><span class="line">CYM       CYS       CYX       GLH       GLN       GLU       GLY       HID</span><br><span class="line">HIE       HIP       HIS       HYP       ILE       LEU       LYN       LYS</span><br><span class="line">MET       NALA      NARG      NASN      NASP      NCYS      NCYX      NGLN</span><br><span class="line">NGLU      NGLY      NHE       NHID      NHIE      NHIP      NHIS      NILE</span><br><span class="line">NLEU      NLYS      NME       NMET      NPHE      NPRO      NSER      NTHR</span><br><span class="line">NTRP      NTYR      NVAL      PHE       PRO       SER       THR       TRP</span><br><span class="line">TYR       VAL       frcmod14SBgaff      parm10</span><br></pre></td></tr></table></figure> 检查<code>ACT</code>单元: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; check ACT</span><br><span class="line">Checking 'ACT'....</span><br><span class="line"></span><br><span class="line">Warning: The unperturbed charge of the unit (-1.000001) is not zero.</span><br><span class="line">Checking parameters for unit 'ACT'.</span><br><span class="line">Checking for bond parameters.</span><br><span class="line">Checking for angle parameters.</span><br><span class="line">check:  Warnings: 1</span><br><span class="line">Unit is OK.</span><br></pre></td></tr></table></figure>
+可以看到并没有缺失参数。现在我们再导入<code>ACT.frcmod</code>文件:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loadamberparams ACT.frcmod</span><br></pre></td></tr></table></figure> 接下来就可以将生成的残基导出了: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&gt; saveoff ACT ACT.lib</span><br><span class="line"> Creating ACT.lib</span><br><span class="line">Building topology.</span><br><span class="line">Building atom parameters.</span><br><span class="line">&gt; saveamberparm ACT ACT.prmtop ACT.inpcrd</span><br><span class="line">Checking Unit.</span><br><span class="line"></span><br><span class="line">Warning: The unperturbed charge of the unit (-1.000001) is not zero.</span><br><span class="line"></span><br><span class="line">Note: Ignoring the warning from Unit Checking.</span><br><span class="line"></span><br><span class="line">Building topology.</span><br><span class="line">Building atom parameters.</span><br><span class="line">Building bond parameters.</span><br><span class="line">Building angle parameters.</span><br><span class="line">Building proper torsion parameters.</span><br><span class="line">Building improper torsion parameters.</span><br><span class="line"> total 1 improper torsion applied</span><br><span class="line">Building H-Bond parameters.</span><br><span class="line">Incorporating Non-Bonded adjustments.</span><br><span class="line">Not Marking per-residue atom chain types.</span><br><span class="line">Marking per-residue atom chain types.</span><br><span class="line">  (Residues lacking connect0/connect1 -</span><br><span class="line">   these don't have chain types marked:</span><br><span class="line"></span><br><span class="line">        res     total affected</span><br><span class="line"></span><br><span class="line">        ACT     1</span><br><span class="line">  )</span><br><span class="line"> (no restraints)</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+此时有了<code>ACT.prmtop</code>和<code>ACT.inpcrd</code>,
+可以用这两个文件生成gromacs需要的<code>ACT.top</code>和<code>ACT.gro</code>。这可以用<code>amb2gro_top_gro.py</code>完成:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">amb2gro_top_gro.py -p ACT.prmtop -c ACT.inpcrd -t ACT.top -g ACT.gro -b ACT_out.pdb</span><br></pre></td></tr></table></figure>
+这样我们就有了gromacs可用的<code>.top</code>文件和<code>.gro</code>文件。</p>
+<blockquote>
+<p>TIPS:
+在生成甲铵盐(methylammonium)的力场的时候除了一些识别出错的问题，那是因为我把H原子的名字写成了NH1，在没有最后一列表明原子类型时，它会识别称N原子，所以警告。
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Warning: Small distance for BOND        5       N       NH1     0            1.01  [1.01 - 1.69]</span><br><span class="line">Warning: Small distance for BOND        6       N       NH2     0            1.01  [1.01 - 1.69]</span><br><span class="line">Warning: Small distance for BOND        7       N       NH3     0            1.01  [1.01 - 1.69]</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h1 id="amber力场使用gaussian">AMBER力场(使用Gaussian)</h1>
+<p>使用gaussian来生成精确的静电分布。这里需要提及,
+g09存在一些bug导致无法用于RESP, 所以我们使用g16来进行模拟。</p>
+<h2 id="gaussian的安装">gaussian的安装</h2>
+<p>首先进行gaussian的安装。<a target="_blank" rel="noopener" href="http://sobereva.com/439">gaussian的安装方法</a>在该网页中。Linux的gaussian安装包是已经编译好的，因此只要设置好环境变量即可。首先先进行解压，假设压缩包为<code>g16.tar.gz</code>，则使用以下命令进行解压:
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf g16.tar.gz</span><br></pre></td></tr></table></figure>
+假设压缩后的<code>g16</code>文件夹放置在<code>/home/hapo/</code>文件夹下。先在<code>/home/hapo/g16</code>文件夹下新建文件夹<code>scratch</code>。接下来在<code>.bashrc</code>文件中添加如下内容:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> g16root=/home/hapo</span><br><span class="line"><span class="built_in">export</span> GAUSS_SCRDIR=/home/hapo/g16/scratch</span><br><span class="line"><span class="built_in">source</span> /home/hapo/g16/bsd/g16.profile</span><br></pre></td></tr></table></figure> 接下来在进入<code>/home/hapo/g16</code>中更改文件的权限:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> 750 -R *</span><br></pre></td></tr></table></figure> 加下来只要重开终端即可运行g16。</p>
+<h2 id="生成mol2文件">生成mol2文件</h2>
+<p>这一步使用<a target="_blank" rel="noopener" href="https://github.com/tamaswells/GMX">别人的脚本</a>，使用方法记录在该<a target="_blank" rel="noopener" href="https://jerkwin.github.io/2019/07/14/%E8%AE%B8%E6%A5%A0-%E4%BD%BF%E7%94%A8GAFF%E5%8A%9B%E5%9C%BA%E5%8F%82%E6%95%B0%E5%8C%96%E5%B0%8F%E5%88%86%E5%AD%90%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B7%A5%E5%85%B7/">Jerkwin博客网页中</a>。</p>
+<p>首先生成gaussian程序的输入文件: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python pre.py acetate.pdb -1</span><br></pre></td></tr></table></figure> 之后运行gaussian程序:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g16 &lt;ACT.gjf &gt;ACT.out</span><br></pre></td></tr></table></figure> 最后运行<code>post.py</code>程序: <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python post.py</span><br></pre></td></tr></table></figure>
+以上命令最终会生成<code>ACT.mol2</code>文件，其中的静电荷是用gaussian计算后拟合得到的。</p>
+<p>最后我们再用以上提及的<code>tleap</code>和<code>amb2gro_top_gro.py</code>即可生成gromacs的<code>.top</code>和<code>.gro</code>文件。</p>
+<h1 id="opls-aa力场使用ligpargen">OPLS-AA力场(使用LigParGen)</h1>
+<p><a target="_blank" rel="noopener" href="http://zarbi.chem.yale.edu/ligpargen/">LigParGen</a>可以用于生成OPLS-AA力场，只要上传相应的PDB文件进行相应的设置即可。需要注意的是，该网站需要用Edges打开才能正常运行。
+<img src="/2022/12/29/%E5%88%B6%E4%BD%9C%E5%B0%8F%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA/LigParGen.png" class="" title="LigParGen网页">
+点击<code>Submit Molecule</code>之后，只要下载gromacs的<code>.top</code>和<code>.gro</code>文件即可。关于使用LigParGen生成lammaps力场文件的方法<a target="_blank" rel="noopener" href="https://longkunxuluke.github.io/posts/2020/11/blog-post-4/">在此</a>。</p>
+<h1 id="opls-aa力场使用tppmktop">OPLS-AA力场(使用TPPMKTOP)</h1>
+<p><a target="_blank" rel="noopener" href="http://erg.biophys.msu.ru/tpp/">TPPMKTOP</a>也可以用于生成OPLS-AA力场，并且和<a target="_blank" rel="noopener" href="https://pubs.acs.org/doi/10.1021/ja058637b">文献</a>中的静电值最为接近，该文献可能是使用该程序生成的。
+<img src="/2022/12/29/%E5%88%B6%E4%BD%9C%E5%B0%8F%E5%88%86%E5%AD%90%E5%8A%9B%E5%9C%BA/tppmktop.png" class="" title="LigParGen网页"> 同样，只要上传相应的PDB文件即可。</p>
+<h1 id="构建gromacs拓扑文件">构建gromacs拓扑文件</h1>
+<p>为了能够用gromacs进行模拟，先构建gromacs可用的<code>.top</code>文件。小分子的力场放在<code>molecule</code>文件夹中。除了以上生成的力场文件外，水分子使用重水进行模拟，水分子的力场放在<code>heavywater</code>文件夹中。首先先在<code>topol.top</code>文件中写下如下内容:
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#include "amber14sb_parmbsc1.ff/forcefield.itp"</span><br><span class="line">#include "heavywater/tip3p-hw.itp"</span><br><span class="line">#include "molecule/ACT.itp"</span><br><span class="line">#include "molecule/MLM.itp"</span><br><span class="line">#include "amber14sb_parmbsc1.ff/ions.itp"</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[ System ]</span><br><span class="line">small molecule in water</span><br><span class="line"></span><br><span class="line">[ Molecules ]</span><br></pre></td></tr></table></figure>
+以下是一种外门邪道的构建<code>.top</code>和<code>.gro</code>的方法。<code>solvate</code>可以用来给空盒子填充水，可以这样写:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gmx solvate -cs spc216.gro -o conf.gro -box 2.5 2.5 2.5 -p topol.top</span><br></pre></td></tr></table></figure>
+这样子可以生成一个<code>conf.gro</code>文件，盒子大小为<span class="math inline"><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex;" xmlns="http://www.w3.org/2000/svg" width="23.608ex" height="1.557ex" role="img" focusable="false" viewBox="0 -666 10434.9 688"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path data-c="2E" d="M78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60Z" transform="translate(500,0)"></path><path data-c="35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z" transform="translate(778,0)"></path></g><g data-mml-node="mi" transform="translate(1278,0)"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(1878,0)"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(2978.2,0)"><path data-c="D7" d="M630 29Q630 9 609 9Q604 9 587 25T493 118L389 222L284 117Q178 13 175 11Q171 9 168 9Q160 9 154 15T147 29Q147 36 161 51T255 146L359 250L255 354Q174 435 161 449T147 471Q147 480 153 485T168 490Q173 490 175 489Q178 487 284 383L389 278L493 382Q570 459 587 475T609 491Q630 491 630 471Q630 464 620 453T522 355L418 250L522 145Q606 61 618 48T630 29Z"></path></g><g data-mml-node="mn" transform="translate(3978.4,0)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path data-c="2E" d="M78 60Q78 84 95 102T138 120Q162 120 180 104T199 61Q199 36 182 18T139 0T96 17T78 60Z" transform="translate(500,0)"></path><path data-c="35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z" transform="translate(778,0)"></path></g><g data-mml-node="mi" transform="translate(5256.4,0)"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(5856.4,0)"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mo" transform="translate(6956.7,0)"><path data-c="D7" d="M630 29Q630 9 609 9Q604 9 587 25T493 118L389 222L284 117Q178 13 175 11Q171 9 168 9Q160 9 154 15T147 29Q147 36 161 51T255 146L359 250L255 354Q174 435 161 449T147 471Q147 480 153 485T168 490Q173 490 175 489Q178 487 284 383L389 278L493 382Q570 459 587 475T609 491Q630 491 630 471Q630 464 620 453T522 355L418 250L522 145Q606 61 618 48T630 29Z"></path></g><g data-mml-node="mn" transform="translate(7956.9,0)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path><path data-c="35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z" transform="translate(500,0)"></path></g><g data-mml-node="mi" transform="translate(8956.9,0)"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(9556.9,0)"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container></span>，其中填充了水分子。</p>
+<p>同时<code>solvate</code>程序可以通过<code>-maxsol</code>来限制添加的溶液数目。因此我们可以用以下命令来生成包含一个醋酸盐和甲铵盐的水盒子:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gmx solvate -cs ./molecule/ACT.gro -o cp.gro -maxsol 1 -box 2.5 2.5 2.5 -p topol.top</span><br><span class="line">gmx solvate -cs ./molecule/MLM.gro -<span class="built_in">cp</span> cp.gro -o cp2.gro -maxsol 1 -p topol.top</span><br><span class="line">gmx solvate -cs spc216.gro -<span class="built_in">cp</span> cp2.gro -o conf.gro -p topol.top</span><br></pre></td></tr></table></figure></p>
+<p>比较正确的做法应该用<code>insert-molecules</code>来插入小分子，用<code>solvate</code>来填充水分子:
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gmx insert-molecules -ci molecule/ACT.gro -o box.gro -nmol 1 -box 3.2 3.2 3.2</span><br><span class="line">gmx solvate -cs spc216.gro -<span class="built_in">cp</span> box.gro -o conf.gro -p topol.top</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8A%9B%E5%9C%BA%E6%9E%84%E5%BB%BA/" rel="tag"># 力场构建</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/12/11/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9E%84%E9%80%A0%E4%B8%8E%E8%A7%A3%E9%87%8A/" rel="prev" title="计算机程序的构造与解释">
+      <i class="fa fa-chevron-left"></i> 计算机程序的构造与解释
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/07/%E5%9C%A8latex%E4%B8%AD%E5%AE%9A%E4%B9%89%E6%96%B0%E5%91%BD%E4%BB%A4/" rel="next" title="在latex中定义新命令">
+      在latex中定义新命令 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Inhaltsverzeichnis
+        </li>
+        <li class="sidebar-nav-overview">
+          Übersicht
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97pdb%E7%BB%93%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">获得PDB结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#amber%E5%8A%9B%E5%9C%BA%E4%B8%8D%E4%BD%BF%E7%94%A8gaussian"><span class="nav-number">2.</span> <span class="nav-text">AMBER力场(不使用Gaussian)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#amber%E5%8A%9B%E5%9C%BA%E4%BD%BF%E7%94%A8gaussian"><span class="nav-number">3.</span> <span class="nav-text">AMBER力场(使用Gaussian)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gaussian%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">3.1.</span> <span class="nav-text">gaussian的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90mol2%E6%96%87%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">生成mol2文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#opls-aa%E5%8A%9B%E5%9C%BA%E4%BD%BF%E7%94%A8ligpargen"><span class="nav-number">4.</span> <span class="nav-text">OPLS-AA力场(使用LigParGen)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#opls-aa%E5%8A%9B%E5%9C%BA%E4%BD%BF%E7%94%A8tppmktop"><span class="nav-number">5.</span> <span class="nav-text">OPLS-AA力场(使用TPPMKTOP)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAgromacs%E6%8B%93%E6%89%91%E6%96%87%E4%BB%B6"><span class="nav-number">6.</span> <span class="nav-text">构建gromacs拓扑文件</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="hapo"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">hapo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">Artikel</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">Kategorien</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">schlagwörter</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hapo</span>
+</div>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
