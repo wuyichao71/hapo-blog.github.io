@@ -31,6 +31,8 @@ tags:
 
 `universe->me`用来指出这个进程是 rank 几, 0 表示主进程
 
+<!--more-->
+
 ### 读取 input 文件 (in.eq)
 
 函数调用为:
