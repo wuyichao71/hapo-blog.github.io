@@ -81,7 +81,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="Cambiar a barra de navegación">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -150,7 +150,7 @@
 
   </li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Buscar
         </a>
       </li>
   </ul>
@@ -166,7 +166,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off"
-           placeholder="Searching..." spellcheck="false"
+           placeholder="Buscando..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close">
@@ -203,6 +203,79 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
+    <link itemprop="mainEntityOfPage" href="https://hapoblog.fun/2025/06/20/%E5%9C%A8%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BB%BA%E7%AB%8B%E6%96%B0%E7%94%A8%E6%88%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="hapo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hapo's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/06/20/%E5%9C%A8%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BB%BA%E7%AB%8B%E6%96%B0%E7%94%A8%E6%88%B7/" class="post-title-link" itemprop="url">在集群提交服务器上建立新用户</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Publicado el</span>
+              
+
+              <time title="Creado por: 2025-06-20 12:17:17 / Modificado por: 14:10:45" itemprop="dateCreated datePublished" datetime="2025-06-20T12:17:17+09:00">2025-06-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="在集群提交服务器上建立新用户"><a href="#在集群提交服务器上建立新用户" class="headerlink" title="在集群提交服务器上建立新用户"></a>在集群提交服务器上建立新用户</h1><h2 id="建立-linux-用户"><a href="#建立-linux-用户" class="headerlink" title="建立 linux 用户"></a>建立 linux 用户</h2><p>原来在 linux 里有<code>useradd</code>和<code>adduser</code>两个命令，<code>useradd</code>是底层的一个二进制可执行文件，<code>adduser</code>是一个 Perl&#x2F;Python 脚本 (调用<code>useradd</code>)。</p>
+<h3 id="useradd"><a href="#useradd" class="headerlink" title="useradd"></a><code>useradd</code></h3><p><code>useradd</code>是非交互式的底层的创建用户的命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建新用户:</span></span><br><span class="line"><span class="built_in">sudo</span> useradd username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建新用户并指定uid:</span></span><br><span class="line"><span class="built_in">sudo</span> useradd [-u|--uid] <span class="built_in">id</span> username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建新用户并指定shell:</span></span><br><span class="line">user useradd [-s|--shell] /path/to/shell username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建新用户并添加到额外的组内:</span></span><br><span class="line"><span class="built_in">sudo</span> useradd [-G|--<span class="built_in">groups</span>] group1,group2,... username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建新用户并新建默认的家目录:</span></span><br><span class="line"><span class="built_in">sudo</span> useradd [-m|--create-home] username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建新用户并根据模板建立家目录:</span></span><br><span class="line"><span class="built_in">sudo</span> useradd [-k|--skel] path/to/template_directory [-m|--create-home] username</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建新用户没有家目录:</span></span><br><span class="line"><span class="built_in">sudo</span> useradd [-r|--system] username</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="adduser"><a href="#adduser" class="headerlink" title="adduser"></a><code>adduser</code></h3><p><code>adduser</code> 就简单很多</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> adduser username</span><br></pre></td></tr></table></figure>
+
+<p>之后只要输入密码，再不断回车就好了</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/06/20/%E5%9C%A8%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E5%BB%BA%E7%AB%8B%E6%96%B0%E7%94%A8%E6%88%B7/#more" rel="contents">
+                Leer más &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
     <link itemprop="mainEntityOfPage" href="https://hapoblog.fun/2025/06/19/lammps_software/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -225,22 +298,16 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">Publicado el</span>
+              
 
-              <time title="Created: 2025-06-19 14:12:13" itemprop="dateCreated datePublished" datetime="2025-06-19T14:12:13+09:00">2025-06-19</time>
+              <time title="Creado por: 2025-06-19 14:12:13 / Modificado por: 18:21:21" itemprop="dateCreated datePublished" datetime="2025-06-19T14:12:13+09:00">2025-06-19</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-20 00:17:12" itemprop="dateModified" datetime="2025-06-20T00:17:12+09:00">2025-06-20</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">En</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/MD/" itemprop="url" rel="index"><span itemprop="name">MD</span></a>
                 </span>
@@ -268,7 +335,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025/06/19/lammps_software/#more" rel="contents">
-                Read more &raquo;
+                Leer más &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -313,22 +380,16 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">Publicado el</span>
+              
 
-              <time title="Created: 2025-06-19 12:08:13" itemprop="dateCreated datePublished" datetime="2025-06-19T12:08:13+09:00">2025-06-19</time>
+              <time title="Creado por: 2025-06-19 12:08:13 / Modificado por: 12:11:56" itemprop="dateCreated datePublished" datetime="2025-06-19T12:08:13+09:00">2025-06-19</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-20 00:17:12" itemprop="dateModified" datetime="2025-06-20T00:17:12+09:00">2025-06-20</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">En</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/MD/" itemprop="url" rel="index"><span itemprop="name">MD</span></a>
                 </span>
@@ -386,22 +447,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">Publicado el</span>
 
-              <time title="Created: 2024-10-04 13:25:25" itemprop="dateCreated datePublished" datetime="2024-10-04T13:25:25+09:00">2024-10-04</time>
+              <time title="Creado por: 2024-10-04 13:25:25" itemprop="dateCreated datePublished" datetime="2024-10-04T13:25:25+09:00">2024-10-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-20 00:17:12" itemprop="dateModified" datetime="2025-06-20T00:17:12+09:00">2025-06-20</time>
+                <span class="post-meta-item-text">Editado el</span>
+                <time title="Modificado por: 2025-03-18 14:10:12" itemprop="dateModified" datetime="2025-03-18T14:10:12+09:00">2025-03-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">En</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/MD/" itemprop="url" rel="index"><span itemprop="name">MD</span></a>
                 </span>
@@ -460,22 +521,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">Publicado el</span>
 
-              <time title="Created: 2024-10-03 17:10:55" itemprop="dateCreated datePublished" datetime="2024-10-03T17:10:55+09:00">2024-10-03</time>
+              <time title="Creado por: 2024-10-03 17:10:55" itemprop="dateCreated datePublished" datetime="2024-10-03T17:10:55+09:00">2024-10-03</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-20 00:17:12" itemprop="dateModified" datetime="2025-06-20T00:17:12+09:00">2025-06-20</time>
+                <span class="post-meta-item-text">Editado el</span>
+                <time title="Modificado por: 2025-03-18 14:10:12" itemprop="dateModified" datetime="2025-03-18T14:10:12+09:00">2025-03-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">En</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/MD/" itemprop="url" rel="index"><span itemprop="name">MD</span></a>
                 </span>
@@ -496,7 +557,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2024/10/03/how-to-install-gpu-version-of-genesis-on-group-server/#more" rel="contents">
-                Read more &raquo;
+                Leer más &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -541,22 +602,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">Publicado el</span>
 
-              <time title="Created: 2024-10-02 13:41:48" itemprop="dateCreated datePublished" datetime="2024-10-02T13:41:48+09:00">2024-10-02</time>
+              <time title="Creado por: 2024-10-02 13:41:48" itemprop="dateCreated datePublished" datetime="2024-10-02T13:41:48+09:00">2024-10-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-20 00:17:12" itemprop="dateModified" datetime="2025-06-20T00:17:12+09:00">2025-06-20</time>
+                <span class="post-meta-item-text">Editado el</span>
+                <time title="Modificado por: 2025-03-18 14:10:12" itemprop="dateModified" datetime="2025-03-18T14:10:12+09:00">2025-03-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">En</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/MD/" itemprop="url" rel="index"><span itemprop="name">MD</span></a>
                 </span>
@@ -579,7 +640,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2024/10/02/How-to-use-tsubame/#more" rel="contents">
-                Read more &raquo;
+                Leer más &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -624,22 +685,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">Publicado el</span>
 
-              <time title="Created: 2024-09-30 15:00:14" itemprop="dateCreated datePublished" datetime="2024-09-30T15:00:14+09:00">2024-09-30</time>
+              <time title="Creado por: 2024-09-30 15:00:14" itemprop="dateCreated datePublished" datetime="2024-09-30T15:00:14+09:00">2024-09-30</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-20 00:17:12" itemprop="dateModified" datetime="2025-06-20T00:17:12+09:00">2025-06-20</time>
+                <span class="post-meta-item-text">Editado el</span>
+                <time title="Modificado por: 2025-03-18 14:10:12" itemprop="dateModified" datetime="2025-03-18T14:10:12+09:00">2025-03-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">En</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/MD/" itemprop="url" rel="index"><span itemprop="name">MD</span></a>
                 </span>
@@ -660,7 +721,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2024/09/30/Performing-MM-PBSA-on-Fugaku/#more" rel="contents">
-                Read more &raquo;
+                Leer más &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -705,16 +766,16 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">Publicado el</span>
 
-              <time title="Created: 2023-08-07 14:38:51" itemprop="dateCreated datePublished" datetime="2023-08-07T14:38:51+09:00">2023-08-07</time>
+              <time title="Creado por: 2023-08-07 14:38:51" itemprop="dateCreated datePublished" datetime="2023-08-07T14:38:51+09:00">2023-08-07</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-20 00:17:12" itemprop="dateModified" datetime="2025-06-20T00:17:12+09:00">2025-06-20</time>
+                <span class="post-meta-item-text">Editado el</span>
+                <time title="Modificado por: 2025-03-18 14:10:12" itemprop="dateModified" datetime="2025-03-18T14:10:12+09:00">2025-03-18</time>
               </span>
 
           
@@ -732,7 +793,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/08/07/%E5%9C%A8opensuse%E4%B8%8A%E5%A4%96%E7%BD%91%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/#more" rel="contents">
-                Read more &raquo;
+                Leer más &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -777,22 +838,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">Publicado el</span>
 
-              <time title="Created: 2023-04-18 20:49:10" itemprop="dateCreated datePublished" datetime="2023-04-18T20:49:10+09:00">2023-04-18</time>
+              <time title="Creado por: 2023-04-18 20:49:10" itemprop="dateCreated datePublished" datetime="2023-04-18T20:49:10+09:00">2023-04-18</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-20 00:17:12" itemprop="dateModified" datetime="2025-06-20T00:17:12+09:00">2025-06-20</time>
+                <span class="post-meta-item-text">Editado el</span>
+                <time title="Modificado por: 2024-09-30 14:54:41" itemprop="dateModified" datetime="2024-09-30T14:54:41+09:00">2024-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">En</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E5%88%86%E5%AD%90%E6%A8%A1%E6%8B%9F/" itemprop="url" rel="index"><span itemprop="name">分子模拟</span></a>
                 </span>
@@ -818,7 +879,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/04/18/%E5%AE%89%E8%A3%85amber22%E7%9A%84%E5%9D%91/#more" rel="contents">
-                Read more &raquo;
+                Leer más &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -863,16 +924,16 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">Publicado el</span>
 
-              <time title="Created: 2023-03-01 13:50:51" itemprop="dateCreated datePublished" datetime="2023-03-01T13:50:51+09:00">2023-03-01</time>
+              <time title="Creado por: 2023-03-01 13:50:51" itemprop="dateCreated datePublished" datetime="2023-03-01T13:50:51+09:00">2023-03-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2025-06-20 00:17:12" itemprop="dateModified" datetime="2025-06-20T00:17:12+09:00">2025-06-20</time>
+                <span class="post-meta-item-text">Editado el</span>
+                <time title="Modificado por: 2024-09-30 14:54:40" itemprop="dateModified" datetime="2024-09-30T14:54:40+09:00">2024-09-30</time>
               </span>
 
           
@@ -899,84 +960,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/03/01/ssh%E7%99%BB%E9%99%86%E7%9B%B8%E5%85%B3/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
-    <link itemprop="mainEntityOfPage" href="https://hapoblog.fun/2023/02/15/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8git/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="hapo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hapo's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/02/15/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8git/" class="post-title-link" itemprop="url">如何使用git</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-02-15 15:26:02 / Modified: 18:35:06" itemprop="dateCreated datePublished" datetime="2023-02-15T15:26:02+09:00">2023-02-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>git是一个版本控制软件，以前使用的方法过程粗浅，因此我希望记录下git的一些命令，这些命令主要是从jyy的<a target="_blank" rel="noopener" href="https://nju-projectn.github.io/ics-pa-gitbook/ics2022/git.html">ics的PA</a>上抄来的。  </p>
-<p>安装好git后我们需要先进行一些配置工作。在终端中输入一下命令:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;hapo&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;hapo@mail.com&quot;</span></span><br><span class="line">git config --global core.editor vim</span><br><span class="line">git config --global color.ui <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>这些配置会储存在家目录下的<code>.gitconfig</code>中，经过了配置之后，我们就可以开始使用git了。</p>
-<h2 id="本地管理"><a href="#本地管理" class="headerlink" title="本地管理"></a>本地管理</h2><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>我们可以用<code>git clone</code>拉取远程的框架代码，或者在本地进行初始化新的项目:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
-
-<h3 id="查看存档信息"><a href="#查看存档信息" class="headerlink" title="查看存档信息"></a>查看存档信息</h3><p>使用</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">log</span></span><br></pre></td></tr></table></figure>
-<p>查看目前为止所有的存档。<br>使用</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
-<p>可以得知，与当前存档相比，哪些文件发生变化。 </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/15/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8git/#more" rel="contents">
-                Read more &raquo;
+                Leer más &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -998,7 +982,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Página siguiente"></i></a>
   </nav>
 
 
@@ -1042,10 +1026,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          Tabla de contenidos
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          Inicio
         </li>
       </ul>
 
@@ -1065,14 +1049,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">19</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">entradas</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
         <span class="site-state-item-count">6</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-name">categorías</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
@@ -1109,7 +1093,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">hapo</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">Creado mediante <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
         
