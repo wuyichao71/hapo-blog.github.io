@@ -20,17 +20,17 @@
     var CONFIG = {"hostname":"hapoblog.fun","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="密钥登陆linux下可以使用ssh远程登陆集群, 为了登陆方便, 我们可以使用密钥, 生成密钥的命令为: 1ssh-keygen 其中需要输入文件名和key的类型。使用ssh-copy-id命令可以将filename.pub公钥分发给远程主机: 1ssh-copy-id hapo@webserver1 以上命令会将默认公钥分发过去, 也可以使用 1ssh-copy-id -i ~&#x2F;.ssh&#x2F;fil">
+  <meta name="description" content="密钥登陆linux 下可以使用 ssh 远程登陆集群, 为了登陆方便, 我们可以使用密钥, 生成密钥的命令为: 1ssh-keygen  其中需要输入文件名和 key 的类型。使用ssh-copy-id命令可以将filename.pub公钥分发给远程主机: 1ssh-copy-id hapo@webserver1  以上命令会将默认公钥分发过去, 也可以使用 1ssh-copy-id -i ~&#x2F;.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ssh登陆相关">
 <meta property="og:url" content="https://hapoblog.fun/2023/03/01/ssh%E7%99%BB%E9%99%86%E7%9B%B8%E5%85%B3/index.html">
 <meta property="og:site_name" content="Hapo&#39;s blog">
-<meta property="og:description" content="密钥登陆linux下可以使用ssh远程登陆集群, 为了登陆方便, 我们可以使用密钥, 生成密钥的命令为: 1ssh-keygen 其中需要输入文件名和key的类型。使用ssh-copy-id命令可以将filename.pub公钥分发给远程主机: 1ssh-copy-id hapo@webserver1 以上命令会将默认公钥分发过去, 也可以使用 1ssh-copy-id -i ~&#x2F;.ssh&#x2F;fil">
+<meta property="og:description" content="密钥登陆linux 下可以使用 ssh 远程登陆集群, 为了登陆方便, 我们可以使用密钥, 生成密钥的命令为: 1ssh-keygen  其中需要输入文件名和 key 的类型。使用ssh-copy-id命令可以将filename.pub公钥分发给远程主机: 1ssh-copy-id hapo@webserver1  以上命令会将默认公钥分发过去, 也可以使用 1ssh-copy-id -i ~&#x2F;.">
 <meta property="og:locale">
 <meta property="article:published_time" content="2023-03-01T04:50:51.000Z">
-<meta property="article:modified_time" content="2024-09-30T05:54:40.724Z">
+<meta property="article:modified_time" content="2025-06-23T06:39:59.927Z">
 <meta property="article:author" content="hapo">
-<meta property="article:tag" content="ssh">
+<meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://hapoblog.fun/2023/03/01/ssh%E7%99%BB%E9%99%86%E7%9B%B8%E5%85%B3/">
@@ -86,7 +86,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Navigationsleiste an/ausschalten">
+    <div class="toggle" aria-label="تشغيل شريط التصفح">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -155,7 +155,7 @@
 
   </li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Suche
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>بحث
         </a>
       </li>
   </ul>
@@ -171,7 +171,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off"
-           placeholder="Suche..." spellcheck="false"
+           placeholder="بحث..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close">
@@ -230,16 +230,16 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Veröffentlicht am</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Erstellt: 2023-03-01 13:50:51" itemprop="dateCreated datePublished" datetime="2023-03-01T13:50:51+09:00">2023-03-01</time>
+              <time title="أُنشأ: 2023-03-01 13:50:51" itemprop="dateCreated datePublished" datetime="2023-03-01T13:50:51+09:00">2023-03-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Bearbeitet am</span>
-                <time title="Geändert am: 2024-09-30 14:54:40" itemprop="dateModified" datetime="2024-09-30T14:54:40+09:00">2024-09-30</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2025-06-23 15:39:59" itemprop="dateModified" datetime="2025-06-23T15:39:59+09:00">2025-06-23</time>
               </span>
 
           
@@ -253,39 +253,52 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="密钥登陆"><a href="#密钥登陆" class="headerlink" title="密钥登陆"></a>密钥登陆</h1><p>linux下可以使用ssh远程登陆集群, 为了登陆方便, 我们可以使用密钥, 生成密钥的命令为:</p>
+        <h1 id="密钥登陆"><a href="#密钥登陆" class="headerlink" title="密钥登陆"></a>密钥登陆</h1><p>linux 下可以使用 ssh 远程登陆集群, 为了登陆方便, 我们可以使用密钥, 生成密钥的命令为:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen</span><br></pre></td></tr></table></figure>
-<p>其中需要输入文件名和key的类型。<br>使用<code>ssh-copy-id</code>命令可以将<code>filename.pub</code>公钥分发给远程主机:</p>
+
+<p>其中需要输入文件名和 key 的类型。<br>使用<code>ssh-copy-id</code>命令可以将<code>filename.pub</code>公钥分发给远程主机:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id hapo@webserver1</span><br></pre></td></tr></table></figure>
+
 <p>以上命令会将默认公钥分发过去, 也可以使用</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i ~/.ssh/filename.pub hapo@webserver1</span><br></pre></td></tr></table></figure>
+
 <p>指定需要分发的公钥。<br>此时就能不需要密码登陆远程服务器, 若密钥名字不是默认的名字(<code>~/.ssh/id_rsa</code>等), 则可以用以下命令指定:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i ~/.ssh/filename hapo@websever1</span><br></pre></td></tr></table></figure>
+
 <p>另外可以使用以下命令查看密钥和公钥对应的指纹:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -l -f ~/.ssh/filename</span><br><span class="line">ssh-keygen -l -f ~/.ssh/filename.pub</span><br></pre></td></tr></table></figure>
+
 <span id="more"></span>
-<h1 id="ssh配置文件"><a href="#ssh配置文件" class="headerlink" title="ssh配置文件"></a>ssh配置文件</h1><p>可以在<code>~/.ssh/config</code>中写如下命令简化<code>ssh</code>登陆时所需参数:</p>
+
+<h1 id="ssh-配置文件"><a href="#ssh-配置文件" class="headerlink" title="ssh 配置文件"></a>ssh 配置文件</h1><p>可以在<code>~/.ssh/config</code>中写如下命令简化<code>ssh</code>登陆时所需参数:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Host hapo</span><br><span class="line">    HostName ip</span><br><span class="line">    Port 22</span><br><span class="line">    User hapo</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa</span><br><span class="line">    ServerAliveInterval 60 <span class="comment"># 每60秒发送一次空请求</span></span><br><span class="line">    ServerAliveCountMax 10 <span class="comment"># 断开时重新连接的次数</span></span><br></pre></td></tr></table></figure>
 
 <h1 id="使用ssh-agent和ssh-add"><a href="#使用ssh-agent和ssh-add" class="headerlink" title="使用ssh-agent和ssh-add"></a>使用<code>ssh-agent</code>和<code>ssh-add</code></h1><p><code>ssh-agent</code>可以记录密钥的指纹, 并且自动查找和发送到服务器端, 因此不需要在指定所使用的密钥。<br>启动<code>ssh-agent</code>的命令为</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">eval</span> `ssh-agent`</span><br></pre></td></tr></table></figure>
+
 <p>接下里就可以使用<code>ssh-add</code>添加密钥指纹</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-add <span class="comment">#添加默认的密钥指纹</span></span><br><span class="line">ssh-add ~/.ssh/id_rsa_1 <span class="comment">#指定密钥的指纹</span></span><br></pre></td></tr></table></figure>
+
 <p>可以用以下命令查看添加过的密钥指纹</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add -L</span><br></pre></td></tr></table></figure>
+
 <p>可以用以下命令修改添加过的密钥指纹</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh-add -D <span class="comment"># 删除ssh-agent中的所有密钥指纹</span></span><br><span class="line">ssh-add -d key_file <span class="comment"># 删除指定密钥指纹</span></span><br></pre></td></tr></table></figure>
+
 <p>另外, 杀掉现在正在运行的<code>ssh-agent</code>的命令为</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-agent -k</span><br></pre></td></tr></table></figure>
+
 <h1 id="oathtool"><a href="#oathtool" class="headerlink" title="oathtool"></a><code>oathtool</code></h1><p><code>oathtool</code>可以用于生成二次验证, 其使用命令行是</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">oathtool -b --totp &lt;identity&gt;</span><br></pre></td></tr></table></figure>
+
 <p><code>&lt;identity&gt;</code>为用于生成二次验证的身份码。</p>
 <h1 id="sshpass"><a href="#sshpass" class="headerlink" title="sshpass"></a><code>sshpass</code></h1><p><code>sshpass</code>可以用于在命令行输入密码, 命令行如下:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sshpass -p &lt;password&gt; &lt;user&gt;@&lt;hostname&gt;</span><br></pre></td></tr></table></figure>
+
 <p>通过结合<code>oathtool</code>, 可以实现免二次验证:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#！/bin/bash</span></span><br><span class="line">totp=`oathtool -b --totp &lt;identity&gt;`</span><br><span class="line">sshpass -p <span class="string">&quot;&lt;password&gt; <span class="variable">$totp</span>&quot;</span> &lt;user&gt;@&lt;hostname&gt;</span><br></pre></td></tr></table></figure>
 
-<h1 id="expect"><a href="#expect" class="headerlink" title="expect"></a><code>expect</code></h1><p><code>expect</code>命令可以用于与终端进行交互, <code>expect</code>使用的是tcl语言, 这里不准备说明语法，只说明对应的一些用法</p>
+<h1 id="expect"><a href="#expect" class="headerlink" title="expect"></a><code>expect</code></h1><p><code>expect</code>命令可以用于与终端进行交互, <code>expect</code>使用的是 tcl 语言, 这里不准备说明语法，只说明对应的一些用法</p>
 
     </div>
 
@@ -295,7 +308,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/ssh/" rel="tag"># ssh</a>
+              <a href="/tags/linux/" rel="tag"># linux</a>
           </div>
 
         
@@ -360,16 +373,16 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Inhaltsverzeichnis
+          المحتويات
         </li>
         <li class="sidebar-nav-overview">
-          Übersicht
+          عام
         </li>
       </ul>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%86%E9%92%A5%E7%99%BB%E9%99%86"><span class="nav-number">1.</span> <span class="nav-text">密钥登陆</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ssh%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">ssh配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ssh-agent%E5%92%8Cssh-add"><span class="nav-number">3.</span> <span class="nav-text">使用ssh-agent和ssh-add</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#oathtool"><span class="nav-number">4.</span> <span class="nav-text">oathtool</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sshpass"><span class="nav-number">5.</span> <span class="nav-text">sshpass</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#expect"><span class="nav-number">6.</span> <span class="nav-text">expect</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%86%E9%92%A5%E7%99%BB%E9%99%86"><span class="nav-number">1.</span> <span class="nav-text">密钥登陆</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ssh-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">ssh 配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ssh-agent%E5%92%8Cssh-add"><span class="nav-number">3.</span> <span class="nav-text">使用ssh-agent和ssh-add</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#oathtool"><span class="nav-number">4.</span> <span class="nav-text">oathtool</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sshpass"><span class="nav-number">5.</span> <span class="nav-text">sshpass</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#expect"><span class="nav-number">6.</span> <span class="nav-text">expect</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -384,19 +397,19 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">21</span>
-          <span class="site-state-item-name">Artikel</span>
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">المقالات</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
         <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">Kategorien</span></a>
+        <span class="site-state-item-name">التصنيفات</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
         <span class="site-state-item-count">15</span>
-        <span class="site-state-item-name">schlagwörter</span></a>
+        <span class="site-state-item-name">الوسوم</span></a>
       </div>
   </nav>
 </div>
@@ -428,7 +441,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">hapo</span>
 </div>
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
         
