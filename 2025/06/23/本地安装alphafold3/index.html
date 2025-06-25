@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"hapoblog.fun","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="本地安装 alphafold3">
+  <meta name="description" content="本地安装 alphafold3关于这个 docker 的安装教程我无法按照教程实现 rootless docker，因此我只能用 docker 组来实现。原教程在: 安装 alphafold3 添加 sudo 权限给某个用户添加 sudo 权限, 需要 sudo 权限来安装软件。 1sudo usermod -aG sudo username  添加 docker 的官方权限Ubuntu 22.0">
 <meta property="og:type" content="article">
 <meta property="og:title" content="本地安装alphafold3">
 <meta property="og:url" content="https://hapoblog.fun/2025/06/23/%E6%9C%AC%E5%9C%B0%E5%AE%89%E8%A3%85alphafold3/index.html">
 <meta property="og:site_name" content="Hapo&#39;s blog">
-<meta property="og:description" content="本地安装 alphafold3">
+<meta property="og:description" content="本地安装 alphafold3关于这个 docker 的安装教程我无法按照教程实现 rootless docker，因此我只能用 docker 组来实现。原教程在: 安装 alphafold3 添加 sudo 权限给某个用户添加 sudo 权限, 需要 sudo 权限来安装软件。 1sudo usermod -aG sudo username  添加 docker 的官方权限Ubuntu 22.0">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-06-23T06:41:18.000Z">
-<meta property="article:modified_time" content="2025-06-23T06:41:52.858Z">
+<meta property="article:modified_time" content="2025-06-25T07:08:27.462Z">
 <meta property="article:author" content="hapo">
 <meta property="article:tag" content="MD">
 <meta name="twitter:card" content="summary">
@@ -86,7 +86,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="تشغيل شريط التصفح">
+    <div class="toggle" aria-label="Navigationsleiste an/ausschalten">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -155,7 +155,7 @@
 
   </li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>بحث
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Suche
         </a>
       </li>
   </ul>
@@ -171,7 +171,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocapitalize="off"
-           placeholder="بحث..." spellcheck="false"
+           placeholder="Suche..." spellcheck="false"
            type="search" class="search-input">
   </div>
   <span class="popup-btn-close">
@@ -230,16 +230,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">نُشر في</span>
-              
+              <span class="post-meta-item-text">Veröffentlicht am</span>
 
-              <time title="أُنشأ: 2025-06-23 15:41:18 / عُدل: 15:41:52" itemprop="dateCreated datePublished" datetime="2025-06-23T15:41:18+09:00">2025-06-23</time>
+              <time title="Erstellt: 2025-06-23 15:41:18" itemprop="dateCreated datePublished" datetime="2025-06-23T15:41:18+09:00">2025-06-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Bearbeitet am</span>
+                <time title="Geändert am: 2025-06-25 16:08:27" itemprop="dateModified" datetime="2025-06-25T16:08:27+09:00">2025-06-25</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">في</span>
+              <span class="post-meta-item-text">in</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/MD/" itemprop="url" rel="index"><span itemprop="name">MD</span></a>
                 </span>
@@ -256,7 +262,72 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="本地安装-alphafold3"><a href="#本地安装-alphafold3" class="headerlink" title="本地安装 alphafold3"></a>本地安装 alphafold3</h1>
+        <h1 id="本地安装-alphafold3"><a href="#本地安装-alphafold3" class="headerlink" title="本地安装 alphafold3"></a>本地安装 alphafold3</h1><p>关于这个 docker 的安装教程我无法按照教程实现 rootless docker，因此我只能用 docker 组来实现。原教程在: <a target="_blank" rel="noopener" href="https://github.com/google-deepmind/alphafold3/blob/main/docs/installation.md">安装 alphafold3</a></p>
+<h2 id="添加-sudo-权限"><a href="#添加-sudo-权限" class="headerlink" title="添加 sudo 权限"></a>添加 sudo 权限</h2><p>给某个用户添加 sudo 权限, 需要 sudo 权限来安装软件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> usermod -aG <span class="built_in">sudo</span> username</span><br></pre></td></tr></table></figure>
+
+<h2 id="添加-docker-的官方权限"><a href="#添加-docker-的官方权限" class="headerlink" title="添加 docker 的官方权限"></a>添加 docker 的官方权限</h2><h3 id="Ubuntu-22-04"><a href="#Ubuntu-22-04" class="headerlink" title="Ubuntu 22.04"></a>Ubuntu 22.04</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"><span class="built_in">sudo</span> apt-get install ca-certificates curl</span><br><span class="line"><span class="built_in">sudo</span> install -m 0755 -d /etc/apt/keyrings</span><br><span class="line"><span class="built_in">sudo</span> curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> a+r /etc/apt/keyrings/docker.asc</span><br></pre></td></tr></table></figure>
+
+<h3 id="opensuSE"><a href="#opensuSE" class="headerlink" title="opensuSE"></a>opensuSE</h3><p>opensuSE 不需要设置什么权限</p>
+<span id="more"></span>
+
+<h2 id="安装-docker"><a href="#安装-docker" class="headerlink" title="安装 docker"></a>安装 docker</h2><h3 id="Ubuntu-22-04-1"><a href="#Ubuntu-22-04-1" class="headerlink" title="Ubuntu 22.04"></a>Ubuntu 22.04</h3><p>这是在添加源并且安装 docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> \</span><br><span class="line">  <span class="string">&quot;deb [arch=<span class="subst">$(dpkg --print-architecture)</span> signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \</span></span><br><span class="line"><span class="string">  <span class="subst">$(. /etc/os-release &amp;&amp; echo <span class="string">&quot;<span class="variable">$VERSION_CODENAME</span>&quot;</span>)</span> stable&quot;</span> | \</span><br><span class="line">  <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/docker.list &gt; /dev/null</span><br><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"><span class="built_in">sudo</span> apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br><span class="line"><span class="built_in">sudo</span> docker run hello-world</span><br></pre></td></tr></table></figure>
+
+<h3 id="opensuSE-1"><a href="#opensuSE-1" class="headerlink" title="opensuSE"></a>opensuSE</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> zypper ref</span><br><span class="line"><span class="built_in">sudo</span> zypper install docker</span><br></pre></td></tr></table></figure>
+
+<h2 id="将用户添加进-docker-组"><a href="#将用户添加进-docker-组" class="headerlink" title="将用户添加进 docker 组"></a>将用户添加进 docker 组</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> usermod -aG docker username</span><br></pre></td></tr></table></figure>
+
+<p>添加入 docker 组后要重启下 terminal 使其生效。</p>
+<p>接下来我们就能不用 sudo 使用 docker 命令了。</p>
+<p>可以用以下命令来测试 docker 是否安装完成。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure>
+
+<p>这个命令会从 docker hub 拉下一个 hello-world 的 docker 镜像。</p>
+<h2 id="安装-NVIDIA-驱动"><a href="#安装-NVIDIA-驱动" class="headerlink" title="安装 NVIDIA 驱动"></a>安装 NVIDIA 驱动</h2><h3 id="Ubuntu-22-04-2"><a href="#Ubuntu-22-04-2" class="headerlink" title="Ubuntu 22.04"></a>Ubuntu 22.04</h3><p>如果还没安装驱动则用以下命令安装 (ubuntu 安装 NVIDIA 驱动好简单啊)。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get -y install alsa-utils ubuntu-drivers-common</span><br><span class="line"><span class="built_in">sudo</span> ubuntu-drivers install</span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> nvidia-smi --gpu-reset</span><br><span class="line"></span><br><span class="line">nvidia-smi  <span class="comment"># Check that the drivers are installed.</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="opensuSE-2"><a href="#opensuSE-2" class="headerlink" title="opensuSE"></a>opensuSE</h3><p>因为在 opensuSE 下安装 NVIDIA 驱动踩了很多次坑，所以暂时默认 opensuSE 下已经按照了 NVIDIA 驱动。</p>
+<h2 id="为-docker-添加-NVIDIA-支持"><a href="#为-docker-添加-NVIDIA-支持" class="headerlink" title="为 docker 添加 NVIDIA 支持"></a>为 docker 添加 NVIDIA 支持</h2><h3 id="Ubuntu-22-02"><a href="#Ubuntu-22-02" class="headerlink" title="Ubuntu 22.02"></a>Ubuntu 22.02</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | <span class="built_in">sudo</span> gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \</span><br><span class="line">  &amp;&amp; curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \</span><br><span class="line">    sed <span class="string">&#x27;s#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g&#x27;</span> | \</span><br><span class="line">    <span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/nvidia-container-toolkit.list</span><br><span class="line"><span class="built_in">sudo</span> apt-get update</span><br><span class="line"><span class="built_in">sudo</span> apt-get install -y nvidia-container-toolkit</span><br><span class="line"><span class="built_in">sudo</span> nvidia-ctk runtime configure --runtime=docker --config=/etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
+
+<h3 id="opensuSE-3"><a href="#opensuSE-3" class="headerlink" title="opensuSE"></a>opensuSE</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="获得-AlphaFold3-的代码"><a href="#获得-AlphaFold3-的代码" class="headerlink" title="获得 AlphaFold3 的代码"></a>获得 AlphaFold3 的代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/google-deepmind/alphafold3.git</span><br></pre></td></tr></table></figure>
+
+<h2 id="下载通用数据"><a href="#下载通用数据" class="headerlink" title="下载通用数据"></a>下载通用数据</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> alphafold3  <span class="comment"># Navigate to the directory with cloned AlphaFold 3 repository.</span></span><br><span class="line">./fetch_databases.sh [&lt;DB_DIR&gt;]</span><br></pre></td></tr></table></figure>
+
+<p>如果直接只写<code>./fetch_databases.sh</code>的话就会下载到家目录下的<code>public_databases</code>下。</p>
+<h2 id="获得模型参数"><a href="#获得模型参数" class="headerlink" title="获得模型参数"></a>获得模型参数</h2><p>需要填这个<a target="_blank" rel="noopener" href="https://docs.google.com/forms/d/e/1FAIpQLSfWZAgo1aYk0O4MuAXZj8xRQ8DafeFJnldNOnh_13qAx2ceZw/viewform">表</a>来获得模型参数，这需要 2-3 天时间。我至今也没得到这个参数文件。</p>
+<h2 id="构建-AlphaFold3-的-docker-镜像"><a href="#构建-AlphaFold3-的-docker-镜像" class="headerlink" title="构建 AlphaFold3 的 docker 镜像"></a>构建 AlphaFold3 的 docker 镜像</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t alphafold3 -f docker/Dockerfile .</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行测试"><a href="#运行测试" class="headerlink" title="运行测试"></a>运行测试</h2><p>在家目录下新建<code>af_input</code>, <code>af_output</code>, 通用数据在<code>~/public_databases</code>下，模型参数在<code>~/models</code>下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">mkdir</span> af_input</span><br><span class="line"><span class="built_in">mkdir</span> af_output</span><br></pre></td></tr></table></figure>
+
+<p>这是官网给的<a target="_blank" rel="noopener" href="https://github.com/google-deepmind/alphafold3?tab=readme-ov-file#installation-and-running-your-first-prediction">example 文件</a></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2PV7&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;sequences&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;protein&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;A&quot;</span><span class="punctuation">,</span> <span class="string">&quot;B&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;sequence&quot;</span><span class="punctuation">:</span> <span class="string">&quot;GMRESYANENQFGFKTINSDIHKIVIVGGYGKLGGLFARYLRASGYPISILDREDWAVAESILANADVVIVSVPINLTLETIERLKPYLTENMLLADLTSVKREPLAKMLEVHTGAVLGLHPMFGADIASMAKQVVVRCDGRFPERYEWLLEQIQIWGAKIYQTNATEHDHNMTYIQALRHFSTFANGLHLSKQPINLANLLALSSPIYRLELAMIGRLFAQDAELYADIIMDKSENLAVIETLKQTYDEALTFFENNDRQGFIDAFHKVRDWFGDYSEQFLKESRQLLQQANDLKQG&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;modelSeeds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dialect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;alphafold3&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="number">1</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>将他保存到<code>~/af_input/fold_input.json</code>里，然后运行以下的文件进行测试。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">docker run -it \</span><br><span class="line">    --volume <span class="variable">$HOME</span>/af_input:/root/af_input \</span><br><span class="line">    --volume <span class="variable">$HOME</span>/af_output:/root/af_output \</span><br><span class="line">    --volume <span class="variable">$HOME</span>/models:/root/models \</span><br><span class="line">    --volume <span class="variable">$HOME</span>/public_databases:/root/public_databases \</span><br><span class="line">    --gpus all \</span><br><span class="line">    alphafold3 \</span><br><span class="line">    python run_alphafold.py \</span><br><span class="line">    --json_path=/root/af_input/fold_input.json \</span><br><span class="line">    --model_dir=/root/models \</span><br><span class="line">    --output_dir=/root/af_output</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装-singularity"><a href="#安装-singularity" class="headerlink" title="安装 singularity"></a>安装 singularity</h2><p>因为要运行 docker 命令的话需要加入 docker 组，为了更方便使用，我们生成 singularity 镜像。</p>
+<h3 id="Ubuntu-22-04-3"><a href="#Ubuntu-22-04-3" class="headerlink" title="Ubuntu 22.04"></a>Ubuntu 22.04</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/sylabs/singularity/releases/download/v4.2.1/singularity-ce_4.2.1-jammy_amd64.deb</span><br><span class="line"><span class="built_in">sudo</span> dpkg --install singularity-ce_4.2.1-jammy_amd64.deb</span><br><span class="line"><span class="built_in">sudo</span> apt-get install -f</span><br></pre></td></tr></table></figure>
+
+<p>这三个命令首先下载<code>.deb</code>包，然后用<code>dpkg</code>去安装 (可能会一些错误)，最后用<code>apt-get</code>解决依赖问题。</p>
+<h2 id="由-docker-镜像生成-singularity-镜像"><a href="#由-docker-镜像生成-singularity-镜像" class="headerlink" title="由 docker 镜像生成 singularity 镜像"></a>由 docker 镜像生成 singularity 镜像</h2><p>先生成一个私有仓库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 5000:5000 --restart=always --name registry registry:2</span><br><span class="line">docker tag alphafold3 localhost:5000/alphafold3</span><br><span class="line">docker push localhost:5000/alphafold3</span><br></pre></td></tr></table></figure>
+
+<p>然后使用 singularity 生成容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SINGULARITY_NOHTTPS=1 singularity build alphafold3.sif docker://localhost:5000/alphafold3:latest</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行测试-1"><a href="#运行测试-1" class="headerlink" title="运行测试"></a>运行测试</h2><p>可以运行以下的命令进行测试：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">singularity <span class="built_in">exec</span> \</span><br><span class="line">      --nv</span><br><span class="line">      --<span class="built_in">bind</span> <span class="variable">$HOME</span>/af_input:/root/af_input \</span><br><span class="line">      --<span class="built_in">bind</span> <span class="variable">$HOME</span>/af_output:/root/af_output \</span><br><span class="line">      --<span class="built_in">bind</span> <span class="variable">$HOME</span>/models:/root/models \</span><br><span class="line">      --<span class="built_in">bind</span> <span class="variable">$HOME</span>/public_databases:/root/public_databases \</span><br><span class="line">      alphafold3.sif \</span><br><span class="line">      python /app/alphafold/run_alphafold.py \</span><br><span class="line">      --json_path=/root/af_input/fold_input.json \</span><br><span class="line">      --model_dir=/root/models \</span><br><span class="line">      --db_dir=/root/public_databases \</span><br><span class="line">      --output_dir=/root/af_output</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>教程里也没告诉<code>run_alphafold.py</code>在<code>/ap/alphafold/</code></p>
+</blockquote>
+<p>对应地，qsub 中的提交脚本为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#$ -S /bin/bash</span></span><br><span class="line"><span class="comment">#$ -cwd</span></span><br><span class="line"><span class="comment">#$ -V</span></span><br><span class="line"><span class="comment">#$ -pe mpi 32</span></span><br><span class="line"><span class="comment">#$ -q all.q@helix.local</span></span><br><span class="line"><span class="comment">#$ -N alphafold3</span></span><br><span class="line"><span class="comment">#$ -e stdout</span></span><br><span class="line"><span class="comment">#$ -o stdout</span></span><br><span class="line"></span><br><span class="line">model_dir=<span class="string">&quot;&lt;YOUR_MODEL_DIRECTORY&gt;&quot;</span></span><br><span class="line">af_input_dir=<span class="string">&quot;&lt;YOUR_AF_INPUT_DIRECTORY&gt;&quot;</span></span><br><span class="line">af_output_dir=<span class="string">&quot;&lt;YOUR_AF_OUTPUT_DIRECTORY&gt;&quot;</span></span><br><span class="line">input_json=<span class="string">&quot;&lt;INPUT_JSON&gt;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="variable">$model_dir</span> <span class="variable">$af_input_dir</span> <span class="variable">$af_output_dir</span> <span class="variable">$input_json</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="keyword">if</span> [[ <span class="string">&quot;<span class="variable">$i</span>&quot;</span> =~ \&lt;.*\&gt; ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;Please set <span class="variable">$&#123;i&#125;</span> directory!&quot;</span> 1&gt;&amp;2</span><br><span class="line">        <span class="built_in">exit</span> -1</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line">singularity <span class="built_in">exec</span> \</span><br><span class="line">    --nv \</span><br><span class="line">    --<span class="built_in">bind</span> <span class="variable">$&#123;af_input_dir&#125;</span>:/root/af_input \</span><br><span class="line">    --<span class="built_in">bind</span> <span class="variable">$&#123;af_output_dir&#125;</span>:/root/af_output \</span><br><span class="line">    --<span class="built_in">bind</span> <span class="variable">$&#123;model_dir&#125;</span>:/root/models \</span><br><span class="line">    --<span class="built_in">bind</span> /home/shared/public_databases:/root/public_databases \</span><br><span class="line">    /home/shared/alphafold3.sif \</span><br><span class="line">    python /app/alphafold/run_alphafold.py \</span><br><span class="line">    --json_path=/root/af_input/<span class="variable">$&#123;input_json&#125;</span> \</span><br><span class="line">    --model_dir=/root/models \</span><br><span class="line">    --db_dir=/root/public_databases \</span><br><span class="line">    --output_dir=/root/af_output</span><br></pre></td></tr></table></figure>
+
     </div>
 
     
@@ -327,16 +398,16 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          المحتويات
+          Inhaltsverzeichnis
         </li>
         <li class="sidebar-nav-overview">
-          عام
+          Übersicht
         </li>
       </ul>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E5%AE%89%E8%A3%85-alphafold3"><span class="nav-number">1.</span> <span class="nav-text">本地安装 alphafold3</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E5%AE%89%E8%A3%85-alphafold3"><span class="nav-number">1.</span> <span class="nav-text">本地安装 alphafold3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0-sudo-%E6%9D%83%E9%99%90"><span class="nav-number">1.1.</span> <span class="nav-text">添加 sudo 权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0-docker-%E7%9A%84%E5%AE%98%E6%96%B9%E6%9D%83%E9%99%90"><span class="nav-number">1.2.</span> <span class="nav-text">添加 docker 的官方权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-22-04"><span class="nav-number">1.2.1.</span> <span class="nav-text">Ubuntu 22.04</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opensuSE"><span class="nav-number">1.2.2.</span> <span class="nav-text">opensuSE</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-docker"><span class="nav-number">1.3.</span> <span class="nav-text">安装 docker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-22-04-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">Ubuntu 22.04</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opensuSE-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">opensuSE</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E7%94%A8%E6%88%B7%E6%B7%BB%E5%8A%A0%E8%BF%9B-docker-%E7%BB%84"><span class="nav-number">1.4.</span> <span class="nav-text">将用户添加进 docker 组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-NVIDIA-%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.5.</span> <span class="nav-text">安装 NVIDIA 驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-22-04-2"><span class="nav-number">1.5.1.</span> <span class="nav-text">Ubuntu 22.04</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opensuSE-2"><span class="nav-number">1.5.2.</span> <span class="nav-text">opensuSE</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA-docker-%E6%B7%BB%E5%8A%A0-NVIDIA-%E6%94%AF%E6%8C%81"><span class="nav-number">1.6.</span> <span class="nav-text">为 docker 添加 NVIDIA 支持</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-22-02"><span class="nav-number">1.6.1.</span> <span class="nav-text">Ubuntu 22.02</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opensuSE-3"><span class="nav-number">1.6.2.</span> <span class="nav-text">opensuSE</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97-AlphaFold3-%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-number">1.7.</span> <span class="nav-text">获得 AlphaFold3 的代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E9%80%9A%E7%94%A8%E6%95%B0%E6%8D%AE"><span class="nav-number">1.8.</span> <span class="nav-text">下载通用数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97%E6%A8%A1%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="nav-number">1.9.</span> <span class="nav-text">获得模型参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA-AlphaFold3-%E7%9A%84-docker-%E9%95%9C%E5%83%8F"><span class="nav-number">1.10.</span> <span class="nav-text">构建 AlphaFold3 的 docker 镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95"><span class="nav-number">1.11.</span> <span class="nav-text">运行测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-singularity"><span class="nav-number">1.12.</span> <span class="nav-text">安装 singularity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu-22-04-3"><span class="nav-number">1.12.1.</span> <span class="nav-text">Ubuntu 22.04</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%B1-docker-%E9%95%9C%E5%83%8F%E7%94%9F%E6%88%90-singularity-%E9%95%9C%E5%83%8F"><span class="nav-number">1.13.</span> <span class="nav-text">由 docker 镜像生成 singularity 镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95-1"><span class="nav-number">1.14.</span> <span class="nav-text">运行测试</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -352,18 +423,18 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives">
           <span class="site-state-item-count">22</span>
-          <span class="site-state-item-name">المقالات</span>
+          <span class="site-state-item-name">Artikel</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
         <span class="site-state-item-count">7</span>
-        <span class="site-state-item-name">التصنيفات</span></a>
+        <span class="site-state-item-name">Kategorien</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
         <span class="site-state-item-count">15</span>
-        <span class="site-state-item-name">الوسوم</span></a>
+        <span class="site-state-item-name">schlagwörter</span></a>
       </div>
   </nav>
 </div>
@@ -395,7 +466,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">hapo</span>
 </div>
-  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
         
