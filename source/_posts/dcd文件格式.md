@@ -10,7 +10,7 @@ tags:
 
 # dcd 文件格式
 
-dcd 有各种格式，比如 X-PLOR DCD 格式和 CHARMM 格式，暂时我们主要处理 CHARMM 格式。
+dcd 有各种格式，比如 [X-PLOR DCD 格式](https://www.ks.uiuc.edu/Research/vmd/plugins/molfile/dcdplugin.html)和 CHARMM 格式，暂时我们主要处理 CHARMM 格式。
 
 由于最初的 dcd 格式可能是用 fortran 写的，并且是使用以下的方式打开文件
 
