@@ -31,9 +31,9 @@ sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyring
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 ```
 
-### opensuSE
+### openSUSE
 
-opensuSE 不需要设置什么权限
+openSUSE 不需要设置什么权限
 
 <!--more-->
 
@@ -53,11 +53,15 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 sudo docker run hello-world
 ```
 
-### opensuSE
+### openSUSE
 
 ```bash
 sudo zypper ref
 sudo zypper install docker
+
+# openSUSE需要手动启动docker
+sudo systemctl enable docker # 设置开机启动
+sudo systemctl start docker # 启动docker
 ```
 
 ## 将用户添加进 docker 组
@@ -93,9 +97,28 @@ sudo nvidia-smi --gpu-reset
 nvidia-smi  # Check that the drivers are installed.
 ```
 
-### opensuSE
+### openSUSE
 
-因为在 opensuSE 下安装 NVIDIA 驱动踩了很多次坑，所以暂时默认 opensuSE 下已经按照了 NVIDIA 驱动。
+添加 NVIDIA 的官方源
+
+```bash
+sudo zypper addrepo --refresh 'https://download.nvidia.com/opensuse/leap/$releasever' NVIDIA
+sudo rpm --import https://www.nvidia.com/en-us/drivers/unix/nvidia-public.key
+```
+
+安装编译工具
+
+```bash
+sudo zypper install -t pattern devel_kernel
+```
+
+安装 NVIDIA 驱动
+
+```bash
+sudo zypper install x11-video-nvidiaG06
+sudo reboot
+nvidia-smi
+```
 
 ## 为 docker 添加 NVIDIA 支持
 
@@ -111,10 +134,19 @@ sudo apt-get install -y nvidia-container-toolkit
 sudo nvidia-ctk runtime configure --runtime=docker --config=/etc/docker/daemon.json
 ```
 
-### opensuSE
+### openSUSE
+
+添加库
 
 ```bash
+https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
+sudo rpm --import https://nvidia.github.io/libnvidia-container/gpgkey
+```
 
+安装 nvidia-container-toolkit
+
+```bash
+sudo zypper install -y nvidia-container-toolkit
 ```
 
 ## 获得 AlphaFold3 的代码
