@@ -69,4 +69,4 @@ xxd data.bin
 
 而这个 record marker 的长度是由编译器决定的，有的编译器是 4 bytes (32 bits)，而有的编译器是 8 bytes (64 bits)。
 
-所以用 C 语言读取 dcd 格式的时候，需要考虑这些，编写起来非常繁琐。暂时我们只考虑 CHARMM 格式，并且 record marker 长度为 4 bytes 的情况。
+所以用 C 语言读取 dcd 格式的时候，需要考虑这些问题，编写起来非常繁琐。暂时我们只考虑 CHARMM 格式，并且 record marker 长度为 4 bytes 的情况。我们以 GENESIS 输出的 dcd 格式为例进行说明。
